@@ -6,5 +6,10 @@
   "assets": {
     "directory": "./out",
     "not_found_handling": "404-page"
-  }
+  },
+  // Custom domains are attached on every deploy. DNS and SSL are created by Cloudflare.
+  "routes": [
+    { "pattern": "healthywealthy.club", "custom_domain": true },
+    { "pattern": "www.healthywealthy.club", "custom_domain": true }
+  ]
 }
