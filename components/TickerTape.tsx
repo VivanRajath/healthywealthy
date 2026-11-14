@@ -13,7 +13,7 @@ export function Tick({ q, decimals = 2, className = "" }: { q: Quote; decimals?:
     prev.current = q.price;
   }, [q.price]);
   return (
-    <span key={q.price} className={`tick ${dir ? `tick--${dir}` : ""} ${className}`}>
+    <span className={`tick ${dir ? `tick--${dir}` : ""} ${className}`}>
       {fmt(q.price, decimals)}
     </span>
   );

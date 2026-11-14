@@ -5,6 +5,7 @@ import { ModeSwitch } from "./ModeSwitch";
 import { useMode } from "./ModeProvider";
 import { ParallaxImage, Reveal, ease } from "./Motion";
 import { Pillars } from "./Pillars";
+import { ClassStrip } from "./ClassStrip";
 import { ShieldAlert } from "lucide-react";
 import { content } from "@/lib/content";
 
@@ -45,6 +46,7 @@ export function Tabs() {
           </div>
 
           <Pillars />
+          {mode === "health" && <ClassStrip />}
           {c.note && (
             <p className="risk">
               <ShieldAlert size={18} strokeWidth={1.6} aria-hidden />

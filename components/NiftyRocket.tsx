@@ -82,7 +82,9 @@ export function NiftyRocket({
   }, [load, reduce]);
 
   const g = useTransform([progress, load] as MotionValue<number>[], ([pv, lv]: number[]) => 0.14 * lv + 0.86 * Math.min(1, Math.max(0, pv)));
-  const clipW = useTransform(g, (v) => v * W);
+  // The drawn line sits in a window that slides open, so the line is painted once and only moved.
+  const revealOut = useTransform(g, (v) => `${(v - 1) * 100}%`);
+  const revealIn = useTransform(g, (v) => `${(1 - v) * 100}%`);
 
   const pos = useTransform([g, exit] as MotionValue<number>[], ([gv, ev]: number[]) => {
     const a = at(pts, cum, gv);
@@ -103,8 +105,9 @@ export function NiftyRocket({
     return { x, y, ang };
   });
 
-  const left = useTransform(pos, (p) => `${(p.x / W) * 100}%`);
-  const top = useTransform(pos, (p) => `${(p.y / H) * 100}%`);
+  // Pixel transforms rather than left/top, so moving the rocket never triggers layout.
+  const left = useTransform(pos, (p) => (p.x / W) * box.current.w);
+  const top = useTransform(pos, (p) => (p.y / H) * box.current.h);
   const rotate = useTransform(pos, (p) => p.ang);
   const price = useTransform(g, (v) => fmt(START + (END - START) * Math.pow(v, 1.2)));
   const tagOpacity = useTransform(exit, [0, 0.4], [1, 0]);
@@ -117,26 +120,27 @@ export function NiftyRocket({
             <stop offset="0" stopColor="#ffffff" stopOpacity="0.18" />
             <stop offset="1" stopColor="#ffffff" stopOpacity="0" />
           </linearGradient>
-          <clipPath id="niftyClip">
-            <motion.rect x="0" y="0" height={H} width={clipW} />
-          </clipPath>
         </defs>
         {[150, 270, 390, 510].map((y) => (
           <line key={y} x1="0" x2={W} y1={y} y2={y} className="nifty__grid" />
         ))}
-        <g clipPath="url(#niftyClip)">
-          <path d={`${d} L${pts[pts.length - 1][0]} ${H} L${pts[0][0]} ${H} Z`} fill="url(#niftyFill)" />
-          <path d={d} className="nifty__line" />
-        </g>
         <path d={d} className="nifty__ghost" />
       </svg>
+      <motion.div className="reveal" style={{ x: revealOut }}>
+        <motion.div className="reveal__in" style={{ x: revealIn }}>
+          <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none">
+            <path d={`${d} L${pts[pts.length - 1][0]} ${H} L${pts[0][0]} ${H} Z`} fill="url(#niftyFill)" />
+            <path d={d} className="nifty__line" />
+          </svg>
+        </motion.div>
+      </motion.div>
 
       <span className="nifty__label" style={{ left: `${(pts[0][0] / W) * 100}%`, top: `${(pts[0][1] / H) * 100}%` }}>
         NIFTY 50
       </span>
 
-      <RocketAnchor id="hero-graph" className="nifty__rocket" style={{ left, top, rotate }} rotate={() => rotate.get()} hold={hold} flame />
-      <motion.span className="nifty__price" style={{ left, top, opacity: tagOpacity }}>
+      <RocketAnchor id="hero-graph" className="nifty__rocket" style={{ x: left, y: top, rotate }} rotate={() => rotate.get()} hold={hold} flame />
+      <motion.span className="nifty__price" style={{ x: left, y: top, opacity: tagOpacity }}>
         {price}
       </motion.span>
     </div>

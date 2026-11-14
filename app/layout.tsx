@@ -6,6 +6,7 @@ import "./globals.css";
 import "./markets.css";
 import "./sections.css";
 import "./rocket.css";
+import "./classes.css";
 
 const display = Fraunces({
   subsets: ["latin"],
@@ -39,7 +40,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <script dangerouslySetInnerHTML={{ __html: boot }} />
       </head>
-      <body>
+      {/* Browser extensions (ColorZilla, Grammarly and others) add attributes to <body> before React loads. */}
+      <body suppressHydrationWarning>
         <ModeProvider>
           <MarketProvider>{children}</MarketProvider>
         </ModeProvider>

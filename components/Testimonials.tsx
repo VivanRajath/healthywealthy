@@ -104,7 +104,9 @@ export function Testimonials() {
             <div className="testi__dots" role="tablist" aria-label="Choose a story">
               {quotes.map((_, d) => (
                 <button key={d} role="tab" aria-selected={d === i} aria-label={`Story ${d + 1}`} className={d === i ? "is-active" : ""} onClick={() => setI(d)}>
-                  <i style={{ animationPlayState: paused ? "paused" : "running" }} />
+                  <i>
+                    <b style={{ animationPlayState: paused ? "paused" : "running" }} />
+                  </i>
                 </button>
               ))}
             </div>

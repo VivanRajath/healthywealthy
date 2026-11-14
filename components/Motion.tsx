@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useReducedMotion, useScroll, useTransform, type MotionValue } from "framer-motion";
+import { motion, useInView, useReducedMotion, useScroll, useTransform, type MotionStyle, type MotionValue } from "framer-motion";
 
 export const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -63,15 +63,6 @@ export function Reveal({
   );
 }
 
-function Word({ word, progress, range }: { word: string; progress: MotionValue<number>; range: [number, number] }) {
-  const opacity = useTransform(progress, range, [0.16, 1]);
-  return (
-    <motion.span style={{ opacity }} className="word">
-      {word}{" "}
-    </motion.span>
-  );
-}
-
 /** Paragraph whose words light up one by one as it scrolls past. */
 export function ScrollWords({ text, className }: { text: string; className?: string }) {
   const ref = useRef<HTMLParagraphElement>(null);
@@ -82,32 +73,45 @@ export function ScrollWords({ text, className }: { text: string; className?: str
   if (reduce) return <p className={className}>{text}</p>;
 
   return (
-    <p ref={ref} className={className} aria-label={text}>
+    // One scroll value on the paragraph; each word works out its own brightness in CSS.
+    // Updating 50 words separately on every frame was one of the heaviest parts of the page.
+    <motion.p
+      ref={ref}
+      className={`${className ?? ""} scrollwords`}
+      aria-label={text}
+      style={{ "--p": scrollYProgress, "--n": words.length } as unknown as MotionStyle}
+    >
       <span aria-hidden>
         {words.map((w, i) => (
-          <Word key={i} word={w} progress={scrollYProgress} range={[i / words.length, (i + 1) / words.length]} />
+          <span key={i} className="word" style={{ "--i": i / words.length } as React.CSSProperties}>
+            {w}{" "}
+          </span>
         ))}
       </span>
-    </p>
+    </motion.p>
   );
 }
 
 /** Heading whose words rise out of a mask when it enters the viewport. */
 export function SplitHeading({ text, className = "h2", as = "h2" }: { text: string; className?: string; as?: "h2" | "h3" }) {
   const reduce = useReducedMotion();
+  // Watch the whole heading. Each word starts clipped below its mask, so watching words
+  // one by one meant some were never seen as visible and never appeared.
+  const ref = useRef<HTMLHeadingElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-8% 0px" });
   const Tag = as;
   const words = text.split(" ");
+  const shown = reduce || inView;
   return (
-    <Tag className={className} aria-label={text}>
+    <Tag ref={ref} className={className} aria-label={text}>
       {words.map((w, i) => (
         <span key={i} aria-hidden>
           <span className="sw">
             <motion.span
               className="sw__i"
               initial={reduce ? false : { y: "115%", rotate: 4 }}
-              whileInView={{ y: "0%", rotate: 0 }}
-              viewport={{ once: true, margin: "-8% 0px" }}
-              transition={{ duration: 1, delay: i * 0.06, ease }}
+              animate={shown ? { y: "0%", rotate: 0 } : undefined}
+              transition={{ duration: 1, delay: i * 0.04, ease }}
             >
               {w}
             </motion.span>

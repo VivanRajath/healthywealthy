@@ -12,10 +12,12 @@
   --up: #1f9d5a;
   --down: #d6493f;
 
+  /* Design scale. 1 up to laptop widths, grows on large and 4K screens. */
+  --k: 1;
   --font: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
   --serif: var(--font-display), Georgia, serif;
-  --max: 1320px;
-  --gutter: clamp(16px, 2.4vw, 32px);
+  --max: calc(1320px * var(--k));
+  --gutter: clamp(calc(16px * var(--k)), 2.4vw, calc(32px * var(--k)));
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -45,7 +47,7 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 124px;
+  scroll-padding-top: calc(124px * var(--k));
   -webkit-text-size-adjust: 100%;
 }
 
@@ -54,7 +56,7 @@ body {
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font);
-  font-size: 17px;
+  font-size: calc(17px * var(--k));
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   overflow-x: clip;
@@ -89,7 +91,7 @@ button {
 }
 
 .h2 {
-  font-size: clamp(40px, 5.2vw, 76px);
+  font-size: clamp(calc(40px * var(--k)), 5.2vw, calc(76px * var(--k)));
   font-weight: 400;
   line-height: 1;
   letter-spacing: -0.03em;
@@ -100,7 +102,7 @@ button {
 
 .lead {
   color: var(--ink-2);
-  font-size: clamp(17px, 1.3vw, 19px);
+  font-size: clamp(calc(17px * var(--k)), 1.3vw, calc(19px * var(--k)));
   max-width: 50ch;
   margin: 0;
 }
@@ -108,23 +110,23 @@ button {
 .section {
   max-width: var(--max);
   margin: 0 auto;
-  padding: clamp(80px, 10vw, 140px) var(--gutter);
+  padding: clamp(calc(80px * var(--k)), 10vw, calc(140px * var(--k))) var(--gutter);
 }
 
 /* Small accent square used at grid corners and above headings */
 .marker {
   display: block;
-  width: 7px;
-  height: 7px;
+  width: calc(7px * var(--k));
+  height: calc(7px * var(--k));
   background: var(--accent);
-  margin-bottom: 28px;
+  margin-bottom: calc(28px * var(--k));
 }
 
 .corner {
   position: absolute;
   z-index: 3;
-  width: 7px;
-  height: 7px;
+  width: calc(7px * var(--k));
+  height: calc(7px * var(--k));
   background: var(--accent);
 }
 
@@ -152,8 +154,8 @@ button {
 .sbtn {
   display: inline-flex;
   gap: 2px;
-  height: 46px;
-  font-size: 13px;
+  height: calc(46px * var(--k));
+  font-size: calc(13px * var(--k));
   font-weight: 500;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -163,14 +165,14 @@ button {
 .sbtn__label {
   display: inline-flex;
   align-items: center;
-  padding: 0 20px;
+  padding: 0 calc(20px * var(--k));
   transition: background-color 0.3s, color 0.3s;
 }
 
 .sbtn__arrow {
   display: grid;
   place-items: center;
-  width: 46px;
+  width: calc(46px * var(--k));
   background: var(--accent);
   color: var(--accent-ink);
   transition: background-color 0.3s;
@@ -199,9 +201,8 @@ button {
 }
 
 .sbtn--glass .sbtn__label {
-  background: rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.2);
   color: var(--white);
-  backdrop-filter: blur(14px);
 }
 
 .sbtn--glass:hover .sbtn__label {
@@ -212,12 +213,12 @@ button {
 .logo {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: calc(10px * var(--k));
   color: currentColor;
 }
 
 .logo__word {
-  font-size: 21px;
+  font-size: calc(21px * var(--k));
   font-weight: 500;
   letter-spacing: -0.03em;
 }
@@ -240,18 +241,17 @@ button {
 }
 
 .nav:not(.is-dark) {
-  background: color-mix(in srgb, var(--paper) 82%, transparent);
-  backdrop-filter: blur(16px) saturate(1.3);
+  background: color-mix(in srgb, var(--paper) 95%, transparent);
   border-bottom: 1px dashed var(--dash);
 }
 
 .nav__inner {
-  height: 76px;
+  height: calc(76px * var(--k));
   padding: 0 var(--gutter);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 24px;
+  gap: calc(24px * var(--k));
 }
 
 .nav__tiles {
@@ -262,19 +262,18 @@ button {
 .nav__tile {
   display: inline-flex;
   align-items: center;
-  height: 34px;
-  padding: 0 16px;
-  font-size: 12.5px;
+  height: calc(34px * var(--k));
+  padding: 0 calc(16px * var(--k));
+  font-size: calc(12.5px * var(--k));
   font-weight: 500;
   letter-spacing: 0.07em;
   text-transform: uppercase;
-  background: rgba(255, 255, 255, 0.55);
-  backdrop-filter: blur(14px);
+  background: rgba(255, 255, 255, 0.88);
   transition: background-color 0.3s, color 0.3s;
 }
 
 .nav.is-dark .nav__tile {
-  background: rgba(20, 26, 34, 0.38);
+  background: rgba(20, 26, 34, 0.66);
 }
 
 .nav__tile:hover {
@@ -283,7 +282,7 @@ button {
 }
 
 .nav__tile--arrow {
-  width: 34px;
+  width: calc(34px * var(--k));
   padding: 0;
   justify-content: center;
   background: var(--accent) !important;
@@ -292,29 +291,28 @@ button {
 
 .nav__burger {
   display: none;
-  width: 42px;
-  height: 42px;
+  width: calc(42px * var(--k));
+  height: calc(42px * var(--k));
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.55);
-  backdrop-filter: blur(14px);
+  background: rgba(255, 255, 255, 0.88);
 }
 
 .nav.is-dark .nav__burger {
-  background: rgba(20, 26, 34, 0.38);
+  background: rgba(20, 26, 34, 0.66);
 }
 
 .drawer {
   position: fixed;
-  inset: 110px 0 0;
+  inset: calc(110px * var(--k)) 0 0;
   background: var(--paper);
   color: var(--ink);
-  padding: 16px var(--gutter);
+  padding: calc(16px * var(--k)) var(--gutter);
   display: flex;
   flex-direction: column;
   opacity: 0;
   visibility: hidden;
-  transform: translateY(-8px);
+  transform: translateY(calc(-8px * var(--k)));
   transition: opacity 0.3s, transform 0.3s var(--ease), visibility 0.3s;
 }
 
@@ -325,14 +323,14 @@ button {
 }
 
 .drawer > a:not(.sbtn) {
-  font-size: 30px;
+  font-size: calc(30px * var(--k));
   letter-spacing: -0.02em;
-  padding: 14px 0;
+  padding: calc(14px * var(--k)) 0;
   border-bottom: 1px dashed var(--dash);
 }
 
 .drawer .sbtn {
-  margin-top: 28px;
+  margin-top: calc(28px * var(--k));
   align-self: flex-start;
 }
 
@@ -373,7 +371,6 @@ button {
   position: absolute;
   inset: 0;
   overflow: hidden;
-  will-change: clip-path;
 }
 
 .hero__media {
@@ -435,7 +432,7 @@ button {
 
 .track__label {
   fill: rgba(255, 255, 255, 0.85);
-  font-size: 11px;
+  font-size: calc(11px * var(--k));
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
@@ -443,13 +440,13 @@ button {
 .hero__intro {
   position: absolute;
   left: var(--gutter);
-  top: clamp(150px, 25vh, 230px);
+  top: clamp(calc(150px * var(--k)), 25vh, calc(230px * var(--k)));
   color: var(--white);
 }
 
 .hero__title {
-  margin: 0 0 36px;
-  font-size: clamp(56px, 8.4vw, 136px);
+  margin: 0 0 calc(36px * var(--k));
+  font-size: clamp(calc(56px * var(--k)), 8.4vw, calc(136px * var(--k)));
   font-weight: 400;
   line-height: 0.95;
   letter-spacing: -0.035em;
@@ -469,7 +466,7 @@ button {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 6px;
+  gap: calc(6px * var(--k));
 }
 
 .hero__bottom {
@@ -480,7 +477,7 @@ button {
   display: grid;
   grid-template-columns: 1fr 1.3fr 1fr;
   align-items: end;
-  gap: 32px;
+  gap: calc(32px * var(--k));
   color: var(--white);
 }
 
@@ -488,12 +485,12 @@ button {
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  font-size: 14px;
+  gap: calc(4px * var(--k));
+  font-size: calc(14px * var(--k));
 }
 
 .hero__members-label {
-  font-size: 12px;
+  font-size: calc(12px * var(--k));
   letter-spacing: 0.08em;
   text-transform: uppercase;
   opacity: 0.75;
@@ -501,32 +498,31 @@ button {
 
 .hero__members strong {
   font-weight: 500;
-  font-size: 18px;
+  font-size: calc(18px * var(--k));
 }
 
 .hero__desc {
   margin: 0;
-  font-size: clamp(17px, 1.5vw, 21px);
+  font-size: clamp(calc(17px * var(--k)), 1.5vw, calc(21px * var(--k)));
   line-height: 1.35;
   max-width: 34ch;
 }
 
 .news {
   justify-self: end;
-  width: min(390px, 100%);
+  width: min(calc(390px * var(--k)), 100%);
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 18px 20px;
-  background: rgba(30, 36, 46, 0.62);
-  backdrop-filter: blur(16px);
+  gap: calc(16px * var(--k));
+  padding: calc(18px * var(--k)) calc(20px * var(--k));
+  background: rgba(22, 28, 36, 0.86);
   border-top: 2px solid var(--accent);
 }
 
 .news__top {
   display: flex;
   justify-content: space-between;
-  font-size: 12px;
+  font-size: calc(12px * var(--k));
   letter-spacing: 0.08em;
   text-transform: uppercase;
   opacity: 0.8;
@@ -535,8 +531,8 @@ button {
 .news__body {
   display: flex;
   align-items: center;
-  gap: 16px;
-  font-size: 16px;
+  gap: calc(16px * var(--k));
+  font-size: calc(16px * var(--k));
   line-height: 1.35;
 }
 
@@ -544,8 +540,8 @@ button {
   flex: none;
   display: grid;
   place-items: center;
-  width: 38px;
-  height: 38px;
+  width: calc(38px * var(--k));
+  height: calc(38px * var(--k));
   background: rgba(255, 255, 255, 0.1);
   transition: background-color 0.3s;
 }
@@ -558,7 +554,7 @@ button {
   position: absolute;
   display: flex;
   flex-direction: column;
-  padding: clamp(18px, 2vw, 28px);
+  padding: clamp(calc(18px * var(--k)), 2vw, calc(28px * var(--k)));
   color: var(--white);
   pointer-events: none;
 }
@@ -571,16 +567,16 @@ button {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  gap: 16px;
-  padding: 14px 0;
+  gap: calc(16px * var(--k));
+  padding: calc(14px * var(--k)) 0;
   border-bottom: 1px dashed rgba(255, 255, 255, 0.25);
-  font-size: 12px;
+  font-size: calc(12px * var(--k));
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 .hero__card-row strong {
-  font-size: clamp(20px, 1.8vw, 26px);
+  font-size: clamp(calc(20px * var(--k)), 1.8vw, calc(26px * var(--k)));
   font-weight: 400;
   letter-spacing: -0.01em;
   text-transform: none;
@@ -590,7 +586,7 @@ button {
   flex: 1;
   width: 100%;
   min-height: 0;
-  margin: 18px 0;
+  margin: calc(18px * var(--k)) 0;
 }
 
 .hero__chart-grid {
@@ -625,7 +621,7 @@ button {
   position: absolute;
   left: var(--gutter);
   top: 18%;
-  width: calc(34% - var(--gutter) - 32px);
+  width: calc(34% - var(--gutter) - calc(32px * var(--k)));
   height: 77%;
   display: flex;
   flex-direction: column;
@@ -633,7 +629,7 @@ button {
 
 .hero__after-title {
   margin: 0;
-  font-size: clamp(40px, 5vw, 76px);
+  font-size: clamp(calc(40px * var(--k)), 5vw, calc(76px * var(--k)));
   font-weight: 400;
   line-height: 1;
   letter-spacing: -0.035em;
@@ -642,7 +638,7 @@ button {
 .hero__after-text {
   margin: auto 0 0;
   max-width: 34ch;
-  font-size: 17px;
+  font-size: calc(17px * var(--k));
   color: var(--ink-2);
 }
 
@@ -651,43 +647,43 @@ button {
   right: var(--gutter);
   top: 18%;
   bottom: 5%;
-  width: calc(34% - var(--gutter) - 32px);
+  width: calc(34% - var(--gutter) - calc(32px * var(--k)));
   margin: 0;
   padding: 0;
   list-style: none;
   display: grid;
   grid-template-rows: repeat(3, 1fr);
-  gap: 24px;
+  gap: calc(24px * var(--k));
 }
 
 .htile {
   position: relative;
   overflow: hidden;
-  padding: 18px;
+  padding: calc(18px * var(--k));
   background: rgba(255, 255, 255, 0.5);
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: calc(12px * var(--k));
 }
 
 .htile__chip {
   display: grid;
   place-items: center;
-  width: 24px;
-  height: 24px;
+  width: calc(24px * var(--k));
+  height: calc(24px * var(--k));
   background: var(--ink);
   color: var(--white);
 }
 
 .htile__title {
-  font-size: 17px;
+  font-size: calc(17px * var(--k));
   max-width: 14ch;
 }
 
 .htile__art {
   position: absolute;
-  right: -6px;
-  bottom: -18px;
+  right: calc(-6px * var(--k));
+  bottom: calc(-18px * var(--k));
   color: var(--ink);
   opacity: 0.32;
 }
@@ -713,7 +709,7 @@ button {
 /* ---------- About ---------- */
 .about {
   position: relative;
-  padding: clamp(96px, 12vw, 160px) var(--gutter) 0;
+  padding: clamp(calc(96px * var(--k)), 12vw, calc(160px * var(--k))) var(--gutter) 0;
   background: linear-gradient(
     180deg,
     var(--paper) 0%,
@@ -727,21 +723,21 @@ button {
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr 3fr;
-  column-gap: 40px;
+  column-gap: calc(40px * var(--k));
   border-top: 1px dashed var(--dash);
-  padding-top: 32px;
+  padding-top: calc(32px * var(--k));
   position: relative;
 }
 
 .about__intro .marker {
   position: absolute;
-  top: -4px;
+  top: calc(-4px * var(--k));
   left: 0;
 }
 
 .about__label {
-  margin: 8px 0 0;
-  font-size: 12.5px;
+  margin: calc(8px * var(--k)) 0 0;
+  font-size: calc(12.5px * var(--k));
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -749,7 +745,7 @@ button {
 
 .about__statement {
   margin: 0;
-  font-size: clamp(28px, 3.4vw, 50px);
+  font-size: clamp(calc(28px * var(--k)), 3.4vw, calc(50px * var(--k)));
   font-weight: 400;
   line-height: 1.12;
   letter-spacing: -0.025em;
@@ -763,10 +759,10 @@ button {
 
 .about__split {
   max-width: var(--max);
-  margin: clamp(72px, 9vw, 120px) auto 0;
+  margin: clamp(calc(72px * var(--k)), 9vw, calc(120px * var(--k))) auto 0;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: clamp(32px, 6vw, 96px);
+  gap: clamp(calc(32px * var(--k)), 6vw, calc(96px * var(--k)));
 }
 
 .alist {
@@ -792,7 +788,7 @@ button {
 }
 
 .alist__label {
-  font-size: 12.5px;
+  font-size: calc(12.5px * var(--k));
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -800,8 +796,8 @@ button {
 }
 
 .alist__title {
-  margin: 14px 0 18px;
-  font-size: clamp(32px, 3.4vw, 52px);
+  margin: calc(14px * var(--k)) 0 calc(18px * var(--k));
+  font-size: clamp(calc(32px * var(--k)), 3.4vw, calc(52px * var(--k)));
   font-weight: 400;
   line-height: 1.04;
   letter-spacing: -0.03em;
@@ -849,9 +845,9 @@ button {
   z-index: 2;
   display: flex;
   justify-content: space-between;
-  padding: 40px 20px 18px;
+  padding: calc(40px * var(--k)) calc(20px * var(--k)) calc(18px * var(--k));
   color: var(--white);
-  font-size: 12.5px;
+  font-size: calc(12.5px * var(--k));
   letter-spacing: 0.08em;
   text-transform: uppercase;
   background: linear-gradient(0deg, rgba(5, 7, 11, 0.7), transparent);
@@ -859,19 +855,19 @@ button {
 
 /* ---------- Tabs ---------- */
 .tabs {
-  padding: clamp(88px, 10vw, 140px) 0 0;
+  padding: clamp(calc(88px * var(--k)), 10vw, calc(140px * var(--k))) 0 0;
   background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 26%, var(--paper)) 0%, var(--paper) 30%);
   transition: background 0.5s;
 }
 
 .tabs__head {
   max-width: var(--max);
-  margin: 0 auto 48px;
+  margin: 0 auto calc(48px * var(--k));
   padding: 0 var(--gutter);
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  gap: 32px;
+  gap: calc(32px * var(--k));
   flex-wrap: wrap;
 }
 
@@ -885,10 +881,10 @@ button {
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  height: 46px;
-  padding: 0 22px;
-  font-size: 13px;
+  gap: calc(10px * var(--k));
+  height: calc(46px * var(--k));
+  padding: 0 calc(22px * var(--k));
+  font-size: calc(13px * var(--k));
   font-weight: 500;
   letter-spacing: 0.07em;
   text-transform: uppercase;
@@ -919,16 +915,16 @@ button {
 }
 
 .switch--lg .switch__btn {
-  height: 56px;
-  padding: 0 32px;
-  font-size: 14px;
+  height: calc(56px * var(--k));
+  padding: 0 calc(32px * var(--k));
+  font-size: calc(14px * var(--k));
 }
 
 .banner {
   position: relative;
   max-width: calc(var(--max) - 2 * var(--gutter));
   margin: 0 auto;
-  height: clamp(460px, 80vh, 780px);
+  height: clamp(calc(460px * var(--k)), 80vh, calc(780px * var(--k)));
   color: var(--white);
   isolation: isolate;
 }
@@ -954,26 +950,26 @@ button {
 
 .banner__copy {
   position: absolute;
-  left: clamp(20px, 3vw, 40px);
-  right: clamp(20px, 3vw, 40px);
-  bottom: clamp(24px, 3vw, 40px);
+  left: clamp(calc(20px * var(--k)), 3vw, calc(40px * var(--k)));
+  right: clamp(calc(20px * var(--k)), 3vw, calc(40px * var(--k)));
+  bottom: clamp(calc(24px * var(--k)), 3vw, calc(40px * var(--k)));
 }
 
 .banner__tag {
   display: inline-flex;
   align-items: center;
-  height: 26px;
-  padding: 0 10px;
+  height: calc(26px * var(--k));
+  padding: 0 calc(10px * var(--k));
   background: var(--accent);
-  font-size: 12px;
+  font-size: calc(12px * var(--k));
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 .banner__title {
-  margin: 20px 0 14px;
-  font-size: clamp(30px, 4vw, 60px);
+  margin: calc(20px * var(--k)) 0 calc(14px * var(--k));
+  font-size: clamp(calc(30px * var(--k)), 4vw, calc(60px * var(--k)));
   font-weight: 400;
   line-height: 1.02;
   letter-spacing: -0.03em;
@@ -991,17 +987,17 @@ button {
 .pillars {
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
-  gap: clamp(40px, 7vw, 110px);
+  gap: clamp(calc(40px * var(--k)), 7vw, calc(110px * var(--k)));
   align-items: start;
 }
 
 .pillars .h2 {
-  margin-bottom: 18px;
+  margin-bottom: calc(18px * var(--k));
 }
 
 .plist {
   list-style: none;
-  margin: 44px 0 0;
+  margin: calc(44px * var(--k)) 0 0;
   padding: 0;
   border-top: 1px dashed var(--dash);
 }
@@ -1013,18 +1009,18 @@ button {
 .plist__btn {
   width: 100%;
   display: grid;
-  grid-template-columns: 48px 1fr 24px;
-  gap: 20px;
+  grid-template-columns: calc(48px * var(--k)) 1fr calc(24px * var(--k));
+  gap: calc(20px * var(--k));
   align-items: start;
-  padding: 24px 0;
+  padding: calc(24px * var(--k)) 0;
   text-align: left;
 }
 
 .plist__icon {
   display: grid;
   place-items: center;
-  width: 48px;
-  height: 48px;
+  width: calc(48px * var(--k));
+  height: calc(48px * var(--k));
   background: rgba(255, 255, 255, 0.7);
   color: var(--ink-2);
   transition: background-color 0.3s, color 0.3s;
@@ -1039,11 +1035,11 @@ button {
 .plist__text {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: calc(4px * var(--k));
 }
 
 .plist__title {
-  font-size: clamp(22px, 2.2vw, 30px);
+  font-size: clamp(calc(22px * var(--k)), 2.2vw, calc(30px * var(--k)));
   font-weight: 400;
   letter-spacing: -0.02em;
   line-height: 1.15;
@@ -1061,12 +1057,12 @@ button {
 
 .plist__detail span {
   display: block;
-  padding-top: 10px;
+  padding-top: calc(10px * var(--k));
   max-width: 48ch;
 }
 
 .plist__chev {
-  margin-top: 10px;
+  margin-top: calc(10px * var(--k));
   color: var(--ink-3);
   transition: transform 0.3s var(--ease), color 0.3s;
 }
@@ -1078,10 +1074,10 @@ button {
 
 .pillars__device {
   position: sticky;
-  top: 100px;
+  top: calc(100px * var(--k));
   display: grid;
   place-items: center;
-  padding: 28px 0;
+  padding: calc(28px * var(--k)) 0;
 }
 
 .pillars__halo {
@@ -1094,22 +1090,22 @@ button {
 
 .phone {
   position: relative;
-  width: 300px;
+  width: calc(300px * var(--k));
   max-width: 100%;
   aspect-ratio: 9 / 18.5;
   border-radius: 46px;
-  padding: 10px;
+  padding: calc(10px * var(--k));
   background: #11161c;
   box-shadow: 0 40px 80px -30px rgba(5, 7, 11, 0.6);
 }
 
 .phone__notch {
   position: absolute;
-  top: 20px;
+  top: calc(20px * var(--k));
   left: 50%;
-  width: 86px;
-  height: 24px;
-  margin-left: -43px;
+  width: calc(86px * var(--k));
+  height: calc(24px * var(--k));
+  margin-left: calc(-43px * var(--k));
   border-radius: 20px;
   background: #000;
   z-index: 2;
@@ -1119,7 +1115,7 @@ button {
   height: 100%;
   border-radius: 37px;
   background: var(--white);
-  padding: 58px 20px 20px;
+  padding: calc(58px * var(--k)) calc(20px * var(--k)) calc(20px * var(--k));
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -1130,12 +1126,12 @@ button {
   justify-content: space-between;
   align-items: center;
   color: var(--ink-2);
-  font-size: 13px;
+  font-size: calc(13px * var(--k));
 }
 
 .phone__metric {
-  margin-top: 16px;
-  font-size: 40px;
+  margin-top: calc(16px * var(--k));
+  font-size: calc(40px * var(--k));
   font-weight: 400;
   letter-spacing: -0.035em;
   line-height: 1;
@@ -1143,25 +1139,25 @@ button {
 
 .phone__metric small {
   display: block;
-  margin-top: 6px;
-  font-size: 13px;
+  margin-top: calc(6px * var(--k));
+  font-size: calc(13px * var(--k));
   letter-spacing: 0;
   color: var(--ink-3);
 }
 
 .phone__delta {
-  margin-top: 10px;
+  margin-top: calc(10px * var(--k));
   align-self: flex-start;
-  font-size: 12px;
+  font-size: calc(12px * var(--k));
   font-weight: 500;
-  padding: 4px 8px;
+  padding: calc(4px * var(--k)) calc(8px * var(--k));
   background: var(--accent-soft);
   color: var(--accent);
 }
 
 .phone__chart {
   width: 100%;
-  margin: 16px 0 8px;
+  margin: calc(16px * var(--k)) 0 calc(8px * var(--k));
   overflow: visible;
 }
 
@@ -1174,8 +1170,8 @@ button {
 .phone__rows div {
   display: flex;
   justify-content: space-between;
-  padding: 10px 0;
-  font-size: 13px;
+  padding: calc(10px * var(--k)) 0;
+  font-size: calc(13px * var(--k));
   border-bottom: 1px dashed var(--line);
 }
 
@@ -1190,12 +1186,12 @@ button {
 
 .phone__btn {
   margin-top: auto;
-  height: 44px;
+  height: calc(44px * var(--k));
   display: grid;
   place-items: center;
   background: var(--accent);
   color: var(--accent-ink);
-  font-size: 12.5px;
+  font-size: calc(12.5px * var(--k));
   font-weight: 500;
   letter-spacing: 0.07em;
   text-transform: uppercase;
@@ -1209,28 +1205,28 @@ button {
 .compound__head {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 40px;
+  gap: calc(40px * var(--k));
   align-items: end;
 }
 
 .compound__body {
-  margin-top: 56px;
+  margin-top: calc(56px * var(--k));
   display: grid;
   grid-template-columns: 0.8fr 1.2fr;
-  gap: clamp(32px, 6vw, 80px);
+  gap: clamp(calc(32px * var(--k)), 6vw, calc(80px * var(--k)));
   align-items: stretch;
 }
 
 .compound__controls {
   display: flex;
   flex-direction: column;
-  gap: 36px;
+  gap: calc(36px * var(--k));
 }
 
 .range {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: calc(16px * var(--k));
 }
 
 .range__row {
@@ -1241,7 +1237,7 @@ button {
 }
 
 .range output {
-  font-size: 24px;
+  font-size: calc(24px * var(--k));
   color: var(--ink);
   letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
@@ -1251,15 +1247,15 @@ button {
   -webkit-appearance: none;
   appearance: none;
   width: 100%;
-  height: 4px;
+  height: calc(4px * var(--k));
   background: linear-gradient(90deg, var(--accent) var(--pct), rgba(10, 15, 20, 0.14) var(--pct));
   outline-offset: 8px;
 }
 
 .range input::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 18px;
-  height: 18px;
+  width: calc(18px * var(--k));
+  height: calc(18px * var(--k));
   background: var(--accent);
   border: 3px solid var(--white);
   box-shadow: 0 0 0 1px var(--accent);
@@ -1267,38 +1263,38 @@ button {
 }
 
 .range input::-moz-range-thumb {
-  width: 14px;
-  height: 14px;
+  width: calc(14px * var(--k));
+  height: calc(14px * var(--k));
   border-radius: 0;
   background: var(--accent);
   border: 3px solid var(--white);
 }
 
 .figures {
-  margin: 8px 0 0;
+  margin: calc(8px * var(--k)) 0 0;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 24px 20px;
-  padding-top: 32px;
+  gap: calc(24px * var(--k)) calc(20px * var(--k));
+  padding-top: calc(32px * var(--k));
   border-top: 1px dashed var(--dash);
 }
 
 .figures div {
   display: flex;
   flex-direction: column-reverse;
-  gap: 4px;
+  gap: calc(4px * var(--k));
 }
 
 .figures dt {
   color: var(--ink-3);
-  font-size: 12.5px;
+  font-size: calc(12.5px * var(--k));
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 .figures dd {
   margin: 0;
-  font-size: 26px;
+  font-size: calc(26px * var(--k));
   letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
 }
@@ -1308,7 +1304,7 @@ button {
 }
 
 .figures .figures__big dd {
-  font-size: clamp(48px, 5vw, 72px);
+  font-size: clamp(calc(48px * var(--k)), 5vw, calc(72px * var(--k)));
   letter-spacing: -0.04em;
   line-height: 1;
   color: var(--accent);
@@ -1316,10 +1312,10 @@ button {
 
 .note {
   display: flex;
-  gap: 8px;
+  gap: calc(8px * var(--k));
   align-items: flex-start;
   margin: 0;
-  font-size: 13px;
+  font-size: calc(13px * var(--k));
   color: var(--ink-3);
 }
 
@@ -1332,8 +1328,8 @@ button {
   position: relative;
   display: flex;
   flex-direction: column;
-  min-height: 380px;
-  padding: 64px 28px 20px;
+  min-height: calc(380px * var(--k));
+  padding: calc(64px * var(--k)) calc(28px * var(--k)) calc(20px * var(--k));
   color: var(--white);
   background: linear-gradient(180deg, var(--night) 0%, var(--accent-deep) 55%, var(--accent) 100%);
 }
@@ -1342,7 +1338,7 @@ button {
   flex: 1;
   width: 100%;
   height: auto;
-  min-height: 240px;
+  min-height: calc(240px * var(--k));
 }
 
 .chart__grid {
@@ -1372,8 +1368,8 @@ button {
 .chart__axis {
   display: flex;
   justify-content: space-between;
-  margin-top: 12px;
-  font-size: 12px;
+  margin-top: calc(12px * var(--k));
+  font-size: calc(12px * var(--k));
   letter-spacing: 0.08em;
   text-transform: uppercase;
   opacity: 0.7;
@@ -1381,11 +1377,11 @@ button {
 
 .chart__legend {
   position: absolute;
-  top: 24px;
-  left: 28px;
+  top: calc(24px * var(--k));
+  left: calc(28px * var(--k));
   display: flex;
-  gap: 18px;
-  font-size: 12px;
+  gap: calc(18px * var(--k));
+  font-size: calc(12px * var(--k));
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -1393,11 +1389,11 @@ button {
 .chart__legend span {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: calc(8px * var(--k));
 }
 
 .chart__legend i {
-  width: 14px;
+  width: calc(14px * var(--k));
   height: 2px;
   background: var(--white);
 }
@@ -1409,7 +1405,7 @@ button {
 /* ---------- Method ---------- */
 .steps {
   list-style: none;
-  margin: 64px 0 0;
+  margin: calc(64px * var(--k)) 0 0;
   padding: 0;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -1420,31 +1416,31 @@ button {
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: 24px;
-  min-height: 300px;
+  padding: calc(24px * var(--k));
+  min-height: calc(300px * var(--k));
   background: rgba(255, 255, 255, 0.55);
 }
 
 .step__marker {
   display: grid;
   place-items: center;
-  width: 44px;
-  height: 44px;
+  width: calc(44px * var(--k));
+  height: calc(44px * var(--k));
   background: var(--ink);
   color: var(--white);
 }
 
 .step__num {
-  margin-top: 64px;
-  font-size: 12.5px;
+  margin-top: calc(64px * var(--k));
+  font-size: calc(12.5px * var(--k));
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--accent);
 }
 
 .step__title {
-  margin: 8px 0 10px;
-  font-size: 30px;
+  margin: calc(8px * var(--k)) 0 calc(10px * var(--k));
+  font-size: calc(30px * var(--k));
   font-weight: 400;
   letter-spacing: -0.025em;
 }
@@ -1461,7 +1457,7 @@ button {
   text-align: center;
   min-height: 92vh;
   margin: 0 var(--gutter) var(--gutter);
-  padding: clamp(110px, 14vw, 180px) var(--gutter);
+  padding: clamp(calc(110px * var(--k)), 14vw, calc(180px * var(--k))) var(--gutter);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1487,7 +1483,7 @@ button {
 
 .closing__title {
   margin: 0 auto;
-  font-size: clamp(44px, 7vw, 112px);
+  font-size: clamp(calc(44px * var(--k)), 7vw, calc(112px * var(--k)));
   font-weight: 400;
   line-height: 0.98;
   letter-spacing: -0.035em;
@@ -1496,9 +1492,9 @@ button {
 }
 
 .closing__sub {
-  margin: 28px auto 40px;
+  margin: calc(28px * var(--k)) auto calc(40px * var(--k));
   max-width: 48ch;
-  font-size: clamp(17px, 1.4vw, 20px);
+  font-size: clamp(calc(17px * var(--k)), 1.4vw, calc(20px * var(--k)));
   opacity: 0.85;
 }
 
@@ -1510,7 +1506,7 @@ button {
 .footer {
   background: var(--night);
   color: var(--paper);
-  padding: 80px var(--gutter) 40px;
+  padding: calc(80px * var(--k)) var(--gutter) calc(40px * var(--k));
 }
 
 .footer__top,
@@ -1522,13 +1518,13 @@ button {
 .footer__top {
   display: grid;
   grid-template-columns: 1.6fr repeat(3, 1fr);
-  gap: 40px;
+  gap: calc(40px * var(--k));
 }
 
 .footer__brand p {
   color: rgba(238, 242, 246, 0.6);
   max-width: 34ch;
-  margin: 18px 0 22px;
+  margin: calc(18px * var(--k)) 0 calc(22px * var(--k));
 }
 
 .footer__contact {
@@ -1537,15 +1533,15 @@ button {
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: calc(10px * var(--k));
   color: rgba(238, 242, 246, 0.75);
-  font-size: 15px;
+  font-size: calc(15px * var(--k));
 }
 
 .footer__contact li {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: calc(10px * var(--k));
 }
 
 .footer__contact svg {
@@ -1553,8 +1549,8 @@ button {
 }
 
 .footer__col h3 {
-  margin: 6px 0 18px;
-  font-size: 12.5px;
+  margin: calc(6px * var(--k)) 0 calc(18px * var(--k));
+  font-size: calc(12.5px * var(--k));
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1566,12 +1562,12 @@ button {
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: calc(12px * var(--k));
 }
 
 .footer__col a {
   color: rgba(238, 242, 246, 0.6);
-  font-size: 15px;
+  font-size: calc(15px * var(--k));
 }
 
 .footer__col a:hover {
@@ -1579,13 +1575,13 @@ button {
 }
 
 .footer__bottom {
-  margin-top: 64px;
-  padding-top: 24px;
+  margin-top: calc(64px * var(--k));
+  padding-top: calc(24px * var(--k));
   border-top: 1px dashed rgba(238, 242, 246, 0.18);
   display: flex;
   justify-content: space-between;
-  gap: 24px;
-  font-size: 13px;
+  gap: calc(24px * var(--k));
+  font-size: calc(13px * var(--k));
   color: rgba(238, 242, 246, 0.45);
 }
 
@@ -1664,7 +1660,7 @@ button {
 @media (max-width: 900px) {
   .hero__bottom {
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: calc(16px * var(--k));
   }
 
   .hero__members,
@@ -1686,7 +1682,7 @@ button {
   }
 
   .hero__after-text {
-    margin-top: 16px;
+    margin-top: calc(16px * var(--k));
   }
 
   .hero__tiles {
@@ -1702,12 +1698,12 @@ button {
   }
 
   .about__label {
-    margin-bottom: 16px;
+    margin-bottom: calc(16px * var(--k));
   }
 
   .about__stage {
     position: sticky;
-    top: 76px;
+    top: calc(76px * var(--k));
     height: auto;
     order: -1;
     z-index: 1;
@@ -1745,16 +1741,16 @@ button {
   }
 
   .switch--lg .switch__btn {
-    height: 48px;
-    padding: 0 22px;
+    height: calc(48px * var(--k));
+    padding: 0 calc(22px * var(--k));
   }
 
   .chart {
-    padding: 56px 16px 16px;
+    padding: calc(56px * var(--k)) calc(16px * var(--k)) calc(16px * var(--k));
   }
 
   .chart__legend {
-    left: 16px;
+    left: calc(16px * var(--k));
   }
 
   .footer__bottom {
@@ -1768,7 +1764,7 @@ button {
   }
 
   .step {
-    min-height: 220px;
+    min-height: calc(220px * var(--k));
   }
 }
 
@@ -1780,5 +1776,52 @@ button {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+
+/* ---------- Large screens ----------
+   Every length in the stylesheets is multiplied by --k, so these steps
+   scale the whole design in proportion on wide monitors and TVs. */
+@media (min-width: 1680px) {
+  :root {
+    --k: 1.12;
+  }
+}
+
+@media (min-width: 1920px) {
+  :root {
+    --k: 1.28;
+  }
+}
+
+@media (min-width: 2160px) {
+  :root {
+    --k: 1.45;
+  }
+}
+
+@media (min-width: 2560px) {
+  :root {
+    --k: 1.7;
+  }
+}
+
+@media (min-width: 3200px) {
+  :root {
+    --k: 2.1;
+  }
+}
+
+@media (min-width: 3840px) {
+  :root {
+    --k: 2.5;
+  }
+}
+
+/* Icons are sized in components, so scale them with the design too. */
+@media (min-width: 1680px) {
+  svg.lucide {
+    zoom: var(--k);
   }
 }

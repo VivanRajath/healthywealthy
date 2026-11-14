@@ -40,12 +40,24 @@ export function Hero() {
   const end = mobile ? MOBILE : DESKTOP;
   const endRef = useRef(end);
   endRef.current = end;
-  // Function form so the crop follows the current breakpoint, not the one from the first render.
-  const clip = useTransform(p, (v) => {
+  /*
+    The photo shrinks into the card by scaling its frame and counter-scaling the content
+    inside it. The GPU only moves and crops layers, so nothing is repainted while scrolling.
+    (A clip-path here repainted the full-screen photo on every frame.)
+  */
+  const crop = (v: number) => {
     const t = Math.min(1, Math.max(0, (v - 0.22) / 0.4));
     const e = 1 - Math.pow(1 - t, 3);
-    const [a, b, c, d] = endRef.current.map((n) => (n * e).toFixed(2));
-    return `inset(${a}% ${b}% ${c}% ${d}%)`;
+    const [top, right, bottom, left] = endRef.current.map((n) => (n * e) / 100);
+    return { top, left, sx: 1 - left - right, sy: 1 - top - bottom };
+  };
+  const frameT = useTransform(p, (v) => {
+    const c = crop(v);
+    return `translate(${c.left * 100}%, ${c.top * 100}%) scale(${c.sx}, ${c.sy})`;
+  });
+  const innerT = useTransform(p, (v) => {
+    const c = crop(v);
+    return `scale(${1 / c.sx}, ${1 / c.sy}) translate(${-c.left * 100}%, ${-c.top * 100}%)`;
   });
   const imgY = useTransform(p, [0, 1], reduce ? ["0%", "0%"] : ["0%", "10%"]);
   const imgScale = useTransform(p, [0, 0.62], reduce ? [1, 1] : [1.04, 1.18]);
@@ -75,7 +87,7 @@ export function Hero() {
   const chart = useTransform(p, [0.64, 0.9], [0, 1]);
 
   return (
-    <section className="hero" ref={ref} id="top">
+    <section className="hero" ref={ref} id="top" data-nav-dark="0.22">
       <div className="hero__sticky">
         <div className="blueprint" aria-hidden>
           <span className="blueprint__h" style={{ top: `${end[0]}%` }} />
@@ -84,7 +96,8 @@ export function Hero() {
           <span className="blueprint__v" style={{ right: `${end[1]}%` }} />
         </div>
 
-        <motion.div className="hero__frame" style={{ clipPath: clip }}>
+        <motion.div className="hero__frame" style={{ transform: frameT }}>
+          <motion.div className="hero__frame-in" style={{ transform: innerT }}>
           <motion.div className="hero__media" style={{ y: imgY, scale: imgScale }}>
             <motion.img
               src={img("1506905925346-21bda4d32df4")}
@@ -98,6 +111,7 @@ export function Hero() {
           <motion.div className="hero__tint" style={{ opacity: scrim }} />
           <motion.div className="hero__graph" style={{ opacity: graphOpacity }}>
             <NiftyRocket progress={ride} exit={exit} hold={graphHold} />
+          </motion.div>
           </motion.div>
         </motion.div>
 

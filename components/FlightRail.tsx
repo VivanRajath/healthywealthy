@@ -20,7 +20,7 @@ const chapters = [
 export function FlightRail() {
   const { scrollYProgress } = useScroll();
   const smooth = useSpring(scrollYProgress, { stiffness: 120, damping: 24 });
-  const fill = useTransform(smooth, (v) => `${v * 100}%`);
+  const fill = smooth;
   const [stops, setStops] = useState<number[]>([]);
   const [current, setCurrent] = useState(0);
 
@@ -55,7 +55,7 @@ export function FlightRail() {
   return (
     <nav className="rail" aria-label="Story chapters">
       <div className="rail__track">
-        <motion.span className="rail__fill" style={{ height: fill }} />
+        <motion.span className="rail__fill" style={{ scaleY: fill }} />
         {stops.map((s, i) => (
           <a
             key={chapters[i].id}

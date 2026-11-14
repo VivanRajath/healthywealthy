@@ -62,7 +62,9 @@ const services: { part: Part; name: string; icon: typeof Target; title: string; 
   },
 ];
 
-const ASSEMBLE = 0.12;
+// Opens over the first 10% of the pin, shows the parts, closes over the last 10%.
+const ASSEMBLE = 0.1;
+const CLOSE = 0.9;
 
 function Label({ i, explode, active, onPick }: { i: number; explode: MotionValue<number>; active: number; onPick: (i: number) => void }) {
   const part = PARTS[i];
@@ -86,16 +88,17 @@ export function RocketServices() {
   const ref = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
   const { scrollYProgress: p } = useScroll({ target: ref, offset: ["start start", "end end"] });
-  const explode = useTransform(p, [0, ASSEMBLE], [0, 1]);
+  const explode = useTransform(p, [0, ASSEMBLE, CLOSE, 1], [0, 1, 1, 0]);
   const lift = useTransform(p, [0, 1], reduce ? [0, 0] : [40, -40]);
   const tilt = useTransform(p, [0, 0.5, 1], reduce ? [0, 0, 0] : [-4, 0, 4]);
   const [active, setActive] = useState(0);
 
   useMotionValueEvent(p, "change", (v) => {
-    const t = (v - ASSEMBLE) / (1 - ASSEMBLE);
+    const t = (v - ASSEMBLE) / (CLOSE - ASSEMBLE);
     const i = Math.min(services.length - 1, Math.max(0, Math.floor(t * services.length)));
     setActive(i);
-    rocketActive.set(v > 0.02 && v < 0.995 ? i : null);
+    // Parts stop dimming as the rocket closes, so it leaves whole and fully lit.
+    rocketActive.set(v > 0.02 && v < CLOSE - 0.02 ? i : null);
   });
 
   // Clicking a label scrolls to that part's slot in the pinned section.
@@ -103,7 +106,7 @@ export function RocketServices() {
     const el = ref.current;
     if (!el) return;
     const span = el.offsetHeight - window.innerHeight;
-    const at = ASSEMBLE + ((i + 0.5) / services.length) * (1 - ASSEMBLE);
+    const at = ASSEMBLE + ((i + 0.5) / services.length) * (CLOSE - ASSEMBLE);
     window.scrollTo({ top: el.offsetTop + span * at, behavior: "smooth" });
   };
 

@@ -1,11 +1,12 @@
 import { Mail, Phone, MapPin } from "lucide-react";
 import { Logo } from "./Logo";
 import { riskLine } from "@/lib/content";
+import { classes } from "@/lib/classes";
 
 const cols = [
-  { title: "Health", links: [["Daily live sessions", "#plans"], ["Yoga and breathwork", "#plans"], ["30 day challenge", "#challenge"], ["Leaderboard", "#challenge"]] },
-  { title: "Wealth", links: [["How copy-trading works", "#plans"], ["Markets", "#markets"], ["Fees", "#faq"], ["Risk disclosure", "#risk"]] },
-  { title: "Community", links: [["About us", "#about"], ["Member stories", "#stories"], ["FAQ", "#faq"], ["Book now", "#enquiry"]] },
+  { title: "Classes", links: classes.map((c) => [c.name, `/classes/${c.slug}/`]) },
+  { title: "Wealth", links: [["How copy-trading works", "/#plans"], ["Markets", "/#markets"], ["Fees", "/#faq"], ["Risk disclosure", "/#risk"]] },
+  { title: "Community", links: [["About us", "/#about"], ["Member stories", "/#stories"], ["FAQ", "/#faq"], ["Book now", "/#enquiry"]] },
 ];
 
 export function Footer() {

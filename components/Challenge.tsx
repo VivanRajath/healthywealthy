@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { useRef, useState } from "react";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 import { Flame, Trophy, Crown, CalendarDays, Medal, Rocket as RocketIcon } from "lucide-react";
 import { Reveal, ease } from "./Motion";
 import { SButton } from "./SButton";
@@ -47,6 +47,8 @@ export function Challenge() {
   const [board, setBoard] = useState<"month" | "all">("month");
   const reduce = useReducedMotion();
   const rows = board === "month" ? month : allTime;
+  const daysRef = useRef<HTMLOListElement>(null);
+  const daysIn = useInView(daysRef, { once: true, margin: "-10% 0px" });
 
   return (
     <section className="challenge" id="challenge">
@@ -95,20 +97,18 @@ export function Challenge() {
             </div>
           </div>
 
-          <ol className="days" aria-label={`Day ${TODAY} of 30, ${MISSED.size} days missed`}>
+          {/* One visibility check for the whole calendar; the days animate in with CSS on the GPU. */}
+          <ol
+            ref={daysRef}
+            className={`days${daysIn || reduce ? " is-in" : ""}`}
+            aria-label={`Day ${TODAY} of 30, ${MISSED.size} days missed`}
+          >
             {Array.from({ length: 30 }, (_, i) => i + 1).map((d) => {
               const state = d > TODAY ? "ahead" : d === TODAY ? "today" : MISSED.has(d) ? "missed" : "done";
               return (
-                <motion.li
-                  key={d}
-                  className={`day day--${state}`}
-                  initial={reduce ? false : { opacity: 0, scale: 0.6 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true, margin: "-10% 0px" }}
-                  transition={{ duration: 0.4, delay: d * 0.025, ease }}
-                >
+                <li key={d} className={`day day--${state}`} style={{ "--d": d } as React.CSSProperties}>
                   {state === "today" ? <RocketIcon size={16} strokeWidth={1.8} aria-label={`Day ${d}, today`} /> : d}
-                </motion.li>
+                </li>
               );
             })}
           </ol>

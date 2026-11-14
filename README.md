@@ -23,6 +23,10 @@ npm start          # serves ./out
 8. Enquiry form and social links (`components/Enquiry.tsx`).
 9. Footer with full risk disclosure (`components/Sections.tsx`).
 
+## Responsive scale
+
+Every px length in `app/*.css` is written as `calc(Npx * var(--k))`. `--k` is 1 up to 1679px and steps up for large screens (1.12 at 1680, 1.28 at 1920, 1.45 at 2160, 1.7 at 2560, 2.1 at 3200, 2.5 at 3840), so the whole design scales in proportion on wide monitors and TVs. Write new lengths the same way. Hairlines under 4px, borders and shadows are left unscaled. Phone and tablet layouts use the max-width media queries in each stylesheet.
+
 ## The story rocket
 
 There is one rocket for the whole site (`components/StoryRocket.tsx`), drawn as an original six part SVG in `components/Rocket.tsx`.

@@ -1,6 +1,6 @@
 export function Logo() {
   return (
-    <a href="#top" className="logo" aria-label="1% Daily Healthy Wealthy home">
+    <a href="/" className="logo" aria-label="1% Daily Healthy Wealthy home">
       <span className="logo__mark" aria-hidden>
         1%
       </span>

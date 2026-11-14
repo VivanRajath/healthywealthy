@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Star, Info, ShieldCheck, ChartCandlestick, Link2, Wallet, KeyRound, Percent } from "lucide-react";
 import { useMarket } from "./MarketProvider";
 import { Tick, Change } from "./TickerTape";
@@ -40,8 +40,22 @@ const W = 800;
 const PH = 300;
 const VH = 70;
 
+function useNarrow() {
+  const [narrow, setNarrow] = useState(false);
+  useEffect(() => {
+    const m = window.matchMedia("(max-width: 640px)");
+    const on = () => setNarrow(m.matches);
+    on();
+    m.addEventListener("change", on);
+    return () => m.removeEventListener("change", on);
+  }, []);
+  return narrow;
+}
+
 function CandleChart({ q, tf }: { q: Quote; tf: Timeframe }) {
-  const base = useMemo(() => makeCandles(q.sym, tf, anchor(q)), [q.sym, tf]); // eslint-disable-line react-hooks/exhaustive-deps
+  // A phone gets fewer, wider candles so each one is still readable.
+  const narrow = useNarrow();
+  const base = useMemo(() => makeCandles(q.sym, tf, anchor(q), narrow ? 34 : 64), [q.sym, tf, narrow]); // eslint-disable-line react-hooks/exhaustive-deps
   // Last candle follows the live price.
   const candles = useMemo(() => {
     const out = base.slice();
