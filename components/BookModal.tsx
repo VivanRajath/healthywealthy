@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { X, Mail, CircleCheck, ArrowRight } from "lucide-react";
-import { smooth } from "@/lib/smooth";
 
 
 export function BookModal({
@@ -23,12 +22,6 @@ export function BookModal({
   const input = useRef<HTMLInputElement>(null);
   // The button that opened the dialog gets focus back when it closes.
   const opener = useRef<HTMLElement | null>(null);
-
-  // The page behind the dialog stays still while it is open.
-  useEffect(() => {
-    if (open) smooth.stop();
-    else smooth.start();
-  }, [open]);
 
   // Each opening starts a fresh form.
   useEffect(() => {

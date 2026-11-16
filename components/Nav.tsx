@@ -8,7 +8,6 @@ import { Logo } from "./Logo";
 import { SButton } from "./SButton";
 import { useMode } from "./ModeProvider";
 import { TickerTape } from "./TickerTape";
-import { smooth } from "@/lib/smooth";
 import type { Mode } from "@/lib/content";
 
 const links: { href: string; label: string; mode?: Mode }[] = [
@@ -40,12 +39,6 @@ export function Nav({ ticker = true }: { ticker?: boolean }) {
       last.current = v;
     }
   });
-
-  // The page behind the menu stays still while it is open.
-  useEffect(() => {
-    if (open) smooth.stop();
-    else smooth.start();
-  }, [open]);
 
   useEffect(() => {
     // The nav sits on the photo only until the photo starts shrinking into its card.

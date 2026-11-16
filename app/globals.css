@@ -69,8 +69,7 @@
 }
 
 html {
-  /* Lenis handles smooth scrolling; native smooth scrolling would fight it. */
-  scroll-behavior: auto;
+  scroll-behavior: smooth;
   /* Sections carry the header's room in their own padding, so a link lands on the whole screen. */
   scroll-padding-top: 0;
   -webkit-text-size-adjust: 100%;
@@ -2194,20 +2193,6 @@ main > .faq {
 #classes,
 #enquiry {
   scroll-margin-top: calc(var(--header) + calc(16px * var(--k)));
-}
-
-/* ---------- Lenis smooth scrolling ---------- */
-html.lenis,
-html.lenis body {
-  height: auto;
-}
-
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-
-.lenis.lenis-stopped {
-  overflow: clip;
 }
 
 /* ---------- Parallax backdrop ---------- */

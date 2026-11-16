@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Fraunces, Manrope, IBM_Plex_Mono } from "next/font/google";
 import { ModeProvider } from "@/components/ModeProvider";
 import { MarketProvider } from "@/components/MarketProvider";
-import { SmoothScroll } from "@/components/SmoothScroll";
 import { Depth3D } from "@/components/Depth3D";
 import { Backdrop } from "@/components/Backdrop";
 import "./globals.css";
@@ -57,7 +56,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body suppressHydrationWarning>
         <ModeProvider>
           <MarketProvider>
-            <SmoothScroll />
             <Depth3D />
             <Backdrop />
             {children}
