@@ -646,12 +646,18 @@ button {
 .hero__intro {
   position: absolute;
   left: var(--gutter);
+  /* Spans the hero so the buttons can sit on the right, level with the headline's last line. */
+  right: var(--gutter);
   top: clamp(calc(150px * var(--k)), 25vh, calc(230px * var(--k)));
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: calc(32px * var(--k));
   color: var(--white);
 }
 
 .hero__title {
-  margin: 0 0 calc(36px * var(--k));
+  margin: 0;
   font-size: var(--t-h1);
   font-weight: 400;
   line-height: 0.95;
@@ -671,8 +677,58 @@ button {
 .hero__ctas {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: calc(6px * var(--k));
+  align-items: flex-end;
+  gap: calc(8px * var(--k));
+  padding-bottom: calc(14px * var(--k));
+}
+
+.hero__ctas .sbtn {
+  height: calc(56px * var(--k));
+}
+
+.hero__ctas .sbtn__arrow {
+  width: calc(56px * var(--k));
+}
+
+/* Both buttons the same width, so the pair reads as one block. */
+.hero__ctas .sbtn {
+  width: 100%;
+}
+
+.hero__ctas .sbtn__label {
+  flex: 1;
+  min-width: calc(180px * var(--k));
+  justify-content: center;
+}
+
+/* Phones: the buttons go back under the headline. */
+@media (max-width: 720px) {
+  .hero__intro {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: calc(28px * var(--k));
+  }
+
+  .hero__ctas {
+    align-items: flex-start;
+    padding-bottom: 0;
+  }
+
+  .hero__ctas .sbtn {
+    width: auto;
+  }
+
+  .hero__ctas .sbtn {
+    height: calc(48px * var(--k));
+  }
+
+  .hero__ctas .sbtn__arrow {
+    width: calc(48px * var(--k));
+  }
+
+  .hero__ctas .sbtn__label {
+    min-width: 0;
+  }
 }
 
 .hero__bottom {

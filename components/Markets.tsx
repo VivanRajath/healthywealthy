@@ -328,7 +328,7 @@ export function Markets() {
         ))}
       </div>
 
-      <div className="terminal" data-depth>
+      <div className="terminal">
         <span className="corner corner--tl" />
         <span className="corner corner--tr" />
         <span className="corner corner--bl" />

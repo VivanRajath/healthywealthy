@@ -69,7 +69,7 @@ export function Challenge() {
         </Reveal>
       </div>
 
-      <div className="challenge__grid" data-depth>
+      <div className="challenge__grid">
         <div className="streak">
           <div className="streak__theme">
             <CalendarDays size={18} strokeWidth={1.6} aria-hidden />
