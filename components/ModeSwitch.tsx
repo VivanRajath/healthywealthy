@@ -32,10 +32,21 @@ export function ModeSwitch({ size = "md", id }: { size?: "md" | "lg"; id: string
             aria-selected={active}
             className={`switch__btn${active ? " is-active" : " is-other"}`}
             style={{ "--opt": color } as React.CSSProperties}
+            tabIndex={active ? 0 : -1}
             onClick={() => {
               setUsed(true);
               setMode(opt);
             }}
+            // Arrow keys move between the two sides, as in any tab list.
+            onKeyDown={(e) => {
+              if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+              e.preventDefault();
+              const next = options[(options.findIndex((o) => o.id === opt) + 1) % options.length];
+              setUsed(true);
+              setMode(next.id);
+              (e.currentTarget.parentElement?.querySelector(`[data-opt="${next.id}"]`) as HTMLElement | null)?.focus();
+            }}
+            data-opt={opt}
           >
             {active && (
               <motion.span

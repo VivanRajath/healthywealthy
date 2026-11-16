@@ -26,9 +26,14 @@ function Count({ to, prefix, suffix }: { to: number; prefix: string; suffix: str
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, margin: "-10% 0px" });
   const reduce = useReducedMotion();
-  const [v, setV] = useState(reduce ? to : 0);
+  // Starts at 0 on the server and in the browser alike, so hydration matches.
+  const [v, setV] = useState(0);
   useEffect(() => {
-    if (!inView || reduce) return;
+    if (!inView) return;
+    if (reduce) {
+      setV(to);
+      return;
+    }
     const c = animate(0, to, { duration: 1.4, ease, onUpdate: (n) => setV(Math.round(n)) });
     return () => c.stop();
   }, [inView, reduce, to]);
@@ -65,6 +70,9 @@ export function About() {
 
   return (
     <section className="about2" id="about">
+      <span className="ghost" data-speed="0.35" aria-hidden>
+        {"1%"}
+      </span>
       <div className="about2__inner">
         <div className="about2__rule">
           <span className="marker" />
@@ -86,7 +94,7 @@ export function About() {
             </Reveal>
           </div>
 
-          <div className="about2__media">
+          <div className="about2__media" data-depth>
             <Wipe
               className="aframe--a"
               src={img("1518611012118-696072aa579a", 1400)}

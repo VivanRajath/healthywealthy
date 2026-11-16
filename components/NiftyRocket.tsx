@@ -74,9 +74,13 @@ export function NiftyRocket({
   }, []);
 
   // A short draw on load, then scroll carries the rest of the line.
-  const load = useMotionValue(reduce ? 1 : 0);
+  // Starts at 0 everywhere so the server and browser render the same price label.
+  const load = useMotionValue(0);
   useEffect(() => {
-    if (reduce) return;
+    if (reduce) {
+      load.set(1);
+      return;
+    }
     const c = animate(load, 1, { duration: 2.2, delay: 0.6, ease: [0.22, 1, 0.36, 1] });
     return () => c.stop();
   }, [load, reduce]);

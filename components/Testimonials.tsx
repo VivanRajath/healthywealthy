@@ -1,9 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
-import { Reveal, ease, ParallaxImage } from "./Motion";
+import { Quote } from "lucide-react";
+import { Reveal, ParallaxImage } from "./Motion";
 import { img } from "@/lib/content";
 
 /*
@@ -41,84 +39,58 @@ const quotes = [
   },
 ];
 
+/*
+  One featured story beside its photograph, then the other three in ruled columns.
+  Everything is on screen at once: no carousel, no timer.
+*/
 export function Testimonials() {
-  const [i, setI] = useState(0);
-  const [paused, setPaused] = useState(false);
-  const go = (d: number) => setI((v) => (v + d + quotes.length) % quotes.length);
-
-  useEffect(() => {
-    if (paused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const id = window.setInterval(() => setI((v) => (v + 1) % quotes.length), 7000);
-    return () => window.clearInterval(id);
-  }, [paused]);
-
-  const q = quotes[i];
+  const featured = quotes[3];
+  const rest = quotes.slice(0, 3);
 
   return (
-    <section className="testi" id="stories" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
-      <Reveal>
-        <span className="marker" />
-        <h2 className="h2">Members, in their words.</h2>
-      </Reveal>
-
-      <div className="testi__body">
-        <div className="testi__media">
-          <span className="corner corner--tl" />
-          <span className="corner corner--br" />
-          <AnimatePresence mode="popLayout" initial={false}>
-            <motion.div
-              key={i}
-              className="testi__img"
-              initial={{ clipPath: "inset(0% 100% 0% 0%)" }}
-              animate={{ clipPath: "inset(0% 0% 0% 0%)" }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.9, ease }}
-            >
-              <ParallaxImage src={q.image} alt="" strength={8} />
-            </motion.div>
-          </AnimatePresence>
-          <span className="testi__tag">{q.tag}</span>
-        </div>
-
-        <div className="testi__quote" aria-live="polite">
-          <Quote className="testi__mark" size={40} strokeWidth={1.2} aria-hidden />
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.figure
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.5, ease }}
-            >
-              <blockquote>{q.text}</blockquote>
-              <figcaption>
-                <strong>{q.name}</strong>
-                <span>{q.meta}</span>
-              </figcaption>
-            </motion.figure>
-          </AnimatePresence>
-
-          <div className="testi__nav">
-            <div className="testi__dots" role="tablist" aria-label="Choose a story">
-              {quotes.map((_, d) => (
-                <button key={d} role="tab" aria-selected={d === i} aria-label={`Story ${d + 1}`} className={d === i ? "is-active" : ""} onClick={() => setI(d)}>
-                  <i>
-                    <b style={{ animationPlayState: paused ? "paused" : "running" }} />
-                  </i>
-                </button>
-              ))}
-            </div>
-            <div className="testi__arrows">
-              <button aria-label="Previous story" onClick={() => go(-1)}>
-                <ChevronLeft size={18} />
-              </button>
-              <button aria-label="Next story" onClick={() => go(1)}>
-                <ChevronRight size={18} />
-              </button>
-            </div>
-          </div>
-        </div>
+    <section className="voices" id="stories">
+      <span className="ghost" data-speed="0.35" aria-hidden>
+        {"Together"}
+      </span>
+      <div className="voices__head">
+        <Reveal>
+          <span className="marker" />
+          <h2 className="h2">Members, in their words.</h2>
+        </Reveal>
       </div>
+
+      <figure className="voices__feature" data-depth>
+        <div className="voices__photo">
+          <ParallaxImage src={featured.image} alt="" strength={8} />
+          <span className="voices__tag">{featured.tag}</span>
+        </div>
+        <div className="voices__body">
+          <Quote className="voices__mark" size={36} strokeWidth={1.2} aria-hidden />
+          <blockquote className="voices__big">{featured.text}</blockquote>
+          <figcaption className="voices__who">
+            <strong>{featured.name}</strong>
+            <span>{featured.meta}</span>
+          </figcaption>
+        </div>
+      </figure>
+
+      <ul className="voices__list">
+        {rest.map((q) => (
+          <li key={q.name}>
+            <figure>
+              <span className="voices__tagline">{q.tag}</span>
+              <blockquote>{q.text}</blockquote>
+              <figcaption className="voices__who">
+                <img src={q.image.replace("w=900", "w=160")} alt="" loading="lazy" />
+                <span>
+                  <strong>{q.name}</strong>
+                  <span>{q.meta}</span>
+                </span>
+              </figcaption>
+            </figure>
+          </li>
+        ))}
+      </ul>
     </section>
   );
 }

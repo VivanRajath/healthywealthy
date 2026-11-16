@@ -1,12 +1,14 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform, type MotionValue } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { motion, useMotionValue, useMotionValueEvent, useTransform, type MotionValue } from "framer-motion";
 import { Target, Video, Copy, KeyRound, Flame, Users, Check } from "lucide-react";
 import { PARTS, OFFSETS, CENTERS, EXPLODED_BOX, type Part } from "./Rocket";
 import { RocketAnchor, rocketActive } from "./StoryRocket";
 import { SButton } from "./SButton";
-import { ease } from "./Motion";
+import { SplitHeading } from "./Motion";
+import { ScrollTrigger, useGSAP } from "@/lib/gsap";
+import { smooth } from "@/lib/smooth";
 import { riskLine } from "@/lib/content";
 
 const services: { part: Part; name: string; icon: typeof Target; title: string; text: string; points: string[]; risk?: boolean }[] = [
@@ -61,9 +63,8 @@ const services: { part: Part; name: string; icon: typeof Target; title: string; 
   },
 ];
 
-// Opens over the first 10% of the pin, shows the parts, closes over the last 10%.
-const ASSEMBLE = 0.1;
-const CLOSE = 0.9;
+
+const num = (i: number) => String(i + 1).padStart(2, "0");
 
 function Label({ i, explode, active, onPick }: { i: number; explode: MotionValue<number>; active: number; onPick: (i: number) => void }) {
   const part = PARTS[i];
@@ -76,117 +77,159 @@ function Label({ i, explode, active, onPick }: { i: number; explode: MotionValue
       onClick={() => onPick(i)}
       aria-label={`Show ${services[i].title}`}
     >
-      <span className="rlabel__num">{String(i + 1).padStart(2, "0")}</span>
-      <span className="rlabel__name">{services[i].name}</span>
+      <span className="rlabel__num">{num(i)}</span>
       <span className="rlabel__line" />
     </motion.button>
   );
 }
 
+/*
+  Inside the rocket, laid out like a service index:
+  left, a sticky index of the six parts; middle, the rocket on a sticky blueprint frame
+  beside a ruler; right, one article per part that scrolls past normally. The article
+  crossing the middle of the screen is the open one: its row in the index lights, its
+  part lights on the rocket and the frame's caption changes.
+*/
 export function RocketServices() {
-  const ref = useRef<HTMLElement>(null);
-  const reduce = useReducedMotion();
-  const { scrollYProgress: p } = useScroll({ target: ref, offset: ["start start", "end end"] });
-  const explode = useTransform(p, [0, ASSEMBLE, CLOSE, 1], [0, 1, 1, 0]);
-  const lift = useTransform(p, [0, 1], reduce ? [0, 0] : [40, -40]);
-  const tilt = useTransform(p, [0, 0.5, 1], reduce ? [0, 0, 0] : [-4, 0, 4]);
+  const body = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
 
+  // How far through the parts we are: opens the rocket at the start, closes it at the end.
+  const p = useMotionValue(0);
+  const explode = useTransform(p, [0, 0.08, 0.95, 1], [0, 1, 1, 0]);
+  const fill = useTransform(p, (v) => v);
+
+  useGSAP(
+    () => {
+      ScrollTrigger.create({
+        trigger: body.current,
+        start: "top 60%",
+        end: "bottom bottom",
+        onUpdate: (self) => p.set(self.progress),
+        onRefresh: (self) => p.set(self.progress),
+      });
+      // Each article is the open one while it covers the middle of the screen.
+      body.current!.querySelectorAll<HTMLElement>(".rpart").forEach((el, i) => {
+        ScrollTrigger.create({
+          trigger: el,
+          start: "top 55%",
+          end: "bottom 55%",
+          onToggle: (self) => self.isActive && setActive(i),
+        });
+      });
+    },
+    { scope: body }
+  );
+
   useMotionValueEvent(p, "change", (v) => {
-    const t = (v - ASSEMBLE) / (CLOSE - ASSEMBLE);
-    const i = Math.min(services.length - 1, Math.max(0, Math.floor(t * services.length)));
-    setActive(i);
     // Parts stop dimming as the rocket closes, so it leaves whole and fully lit.
-    rocketActive.set(v > 0.02 && v < CLOSE - 0.02 ? i : null);
+    rocketActive.set(v > 0.04 && v < 0.95 ? active : null);
   });
 
-  // Clicking a label scrolls to that part's slot in the pinned section.
+  // A new open part lights on the rocket straight away, not only on the next scroll.
+  useEffect(() => {
+    const v = p.get();
+    rocketActive.set(v > 0.04 && v < 0.95 ? active : null);
+  }, [active, p]);
+
   const pick = (i: number) => {
-    const el = ref.current;
-    if (!el) return;
-    const span = el.offsetHeight - window.innerHeight;
-    const at = ASSEMBLE + ((i + 0.5) / services.length) * (CLOSE - ASSEMBLE);
-    window.scrollTo({ top: el.offsetTop + span * at, behavior: "smooth" });
+    const el = body.current?.querySelectorAll<HTMLElement>(".rpart")[i];
+    if (el) smooth.to(el, -window.innerHeight * 0.3);
   };
 
+  // The rocket stays docked in the frame for the whole run of articles.
   const servicesHold = (): [number, number] => {
-    const el = ref.current;
+    const el = body.current;
     if (!el) return [0, 0];
-    return [el.offsetTop, el.offsetTop + el.offsetHeight - window.innerHeight];
+    const top = el.getBoundingClientRect().top + window.scrollY;
+    return [top - window.innerHeight * 0.4, top + el.offsetHeight - window.innerHeight];
   };
-
-  const s = services[active];
-  const Icon = s.icon;
 
   return (
-    <section className="rs" id="inside" ref={ref}>
-      <div className="rs__sticky">
-        <div className="rs__grid" aria-hidden>
-          <span />
-          <span />
-        </div>
-
-        <div className="rs__copy">
+    <section className="rs" id="inside">
+      <div className="rs__intro">
+        <span className="rs__label">
           <span className="marker" />
-          <p className="rs__eyebrow">Inside the rocket</p>
+          Inside the rocket
+        </span>
+        <SplitHeading text="Six parts, one daily habit." className="rs__heading" />
+      </div>
 
-          <ol className="rs__steps" aria-label="Rocket parts">
+      <div className="rs__body" ref={body}>
+        {/* Sticky index of the parts. */}
+        <aside className="rs__left">
+          <nav className="rs__index" aria-label="Rocket parts">
+            <span className="rs__group">The rocket</span>
             {services.map((sv, i) => (
-              <li key={sv.part} className={i === active ? "is-active" : i < active ? "is-done" : ""}>
-                <button onClick={() => pick(i)}>
-                  <span>{String(i + 1).padStart(2, "0")}</span>
-                  {sv.title}
-                </button>
-              </li>
+              <button key={sv.part} className={i === active ? "is-active" : ""} onClick={() => pick(i)}>
+                <span>{sv.name}</span>
+                <span>{num(i)}</span>
+              </button>
             ))}
-          </ol>
+          </nav>
+        </aside>
 
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.div
-              key={active}
-              className="rs__panel"
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -16 }}
-              transition={{ duration: 0.45, ease }}
-            >
-              <span className="rs__chip">
-                <Icon size={16} strokeWidth={1.8} aria-hidden />
-                Part {active + 1} of {services.length}, {s.name}
+        {/* Sticky blueprint frame with the rocket, beside a ruler that fills as you go. */}
+        <div className="rs__media">
+          <span className="rs__ruler" aria-hidden>
+            <motion.i style={{ scaleY: fill }} />
+          </span>
+          <div className="rs__frame">
+            <span className="corner corner--tl" />
+            <span className="corner corner--tr" />
+            <span className="corner corner--bl" />
+            <span className="corner corner--br" />
+            <RocketAnchor id="services" className="rs__rocket" hold={servicesHold} explode={() => explode.get()}>
+              {services.map((_, i) => (
+                <Label key={i} i={i} explode={explode} active={active} onPick={pick} />
+              ))}
+            </RocketAnchor>
+            <span className="rs__meta">
+              <span>
+                {num(active)} / {num(services.length - 1)}
               </span>
-              <h2 className="rs__title">{s.title}</h2>
-              <p className="rs__text">{s.text}</p>
-              <ul className="rs__points">
-                {s.points.map((pt) => (
-                  <li key={pt}>
-                    <Check size={15} aria-hidden />
-                    {pt}
-                  </li>
-                ))}
-              </ul>
-              {s.risk && <p className="rs__risk">{riskLine}</p>}
-              {active === services.length - 1 && (
-                <SButton href="#enquiry" variant="dark">
-                  Board the rocket
-                </SButton>
-              )}
-            </motion.div>
-          </AnimatePresence>
+              {services[active].name}
+            </span>
+          </div>
         </div>
 
-        <motion.div className="rs__stage" style={{ y: lift, rotate: tilt }}>
-          <RocketAnchor
-            id="services"
-            className="rs__rocket"
-            hold={servicesHold}
-            explode={() => explode.get()}
-            rotate={() => tilt.get()}
-          >
-            {services.map((_, i) => (
-              <Label key={i} i={i} explode={explode} active={active} onPick={pick} />
-            ))}
-          </RocketAnchor>
-        </motion.div>
+        {/* One article per part; these scroll normally. */}
+        <div className="rs__content">
+          {services.map((sv, i) => {
+            const Icon = sv.icon;
+            return (
+              <article key={sv.part} className={`rpart${i === active ? " is-active" : ""}`} id={`part-${sv.part}`}>
+                <div className="rpart__head">
+                  <div>
+                    <span className="rpart__num">{num(i)}</span>
+                    <h3 className="rpart__title">{sv.title}</h3>
+                    <p className="rpart__tag">{sv.name}</p>
+                  </div>
+                  <span className="rpart__icon" aria-hidden>
+                    <Icon size={22} strokeWidth={1.5} />
+                  </span>
+                </div>
+                <div className="rpart__body">
+                  <p className="rpart__text">{sv.text}</p>
+                  <ul className="rpart__points">
+                    {sv.points.map((pt) => (
+                      <li key={pt}>
+                        <Check size={14} aria-hidden />
+                        {pt}
+                      </li>
+                    ))}
+                  </ul>
+                  {sv.risk && <p className="rpart__risk">{riskLine}</p>}
+                  {i === services.length - 1 && (
+                    <SButton href="#enquiry" variant="dark">
+                      Board the rocket
+                    </SButton>
+                  )}
+                </div>
+              </article>
+            );
+          })}
+        </div>
       </div>
     </section>
   );

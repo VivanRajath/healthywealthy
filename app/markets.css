@@ -56,10 +56,10 @@
 /* ---------- Ticker tape ---------- */
 .tape {
   display: flex;
-  height: calc(34px * var(--k));
+  height: calc(30px * var(--k));
   border-block: 1px dashed var(--dash);
   background: color-mix(in srgb, var(--paper) 95%, transparent);
-  font-size: calc(13px * var(--k));
+  font-size: var(--t-label);
   color: var(--ink);
 }
 
@@ -77,7 +77,7 @@
   align-items: center;
   gap: calc(10px * var(--k));
   padding: 0 calc(16px * var(--k)) 0 var(--gutter);
-  font-size: calc(11.5px * var(--k));
+  font-size: var(--t-label);
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -148,7 +148,7 @@
   height: calc(32px * var(--k));
   padding: 0 calc(14px * var(--k));
   background: var(--white);
-  font-size: calc(12.5px * var(--k));
+  font-size: var(--t-label);
   font-weight: 600;
   letter-spacing: 0.04em;
 }
@@ -174,7 +174,7 @@
 }
 
 .indices__name {
-  font-size: calc(12px * var(--k));
+  font-size: var(--t-label);
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -190,13 +190,13 @@
 
 .indices__value {
   font-family: var(--serif);
-  font-size: clamp(calc(24px * var(--k)), 2.2vw, calc(32px * var(--k)));
+  font-size: var(--t-h4);
   font-weight: 400;
   letter-spacing: -0.01em;
 }
 
 .indices__abs {
-  font-size: calc(13px * var(--k));
+  font-size: var(--t-small);
   color: var(--ink-3);
   font-variant-numeric: tabular-nums;
 }
@@ -273,7 +273,7 @@
 
 .terminal__title small {
   display: block;
-  font-size: calc(12.5px * var(--k));
+  font-size: var(--t-label);
   opacity: 0.6;
 }
 
@@ -285,7 +285,7 @@
 
 .terminal__ltp {
   font-family: var(--serif);
-  font-size: calc(28px * var(--k));
+  font-size: var(--t-h3);
   font-weight: 400;
 }
 
@@ -299,7 +299,7 @@
   height: calc(30px * var(--k));
   min-width: calc(40px * var(--k));
   padding: 0 calc(10px * var(--k));
-  font-size: calc(12px * var(--k));
+  font-size: var(--t-label);
   font-weight: 600;
   background: rgba(255, 255, 255, 0.06);
   color: rgba(255, 255, 255, 0.7);
@@ -322,7 +322,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: calc(18px * var(--k));
-  font-size: calc(12.5px * var(--k));
+  font-size: var(--t-label);
   font-variant-numeric: tabular-nums;
   color: rgba(255, 255, 255, 0.85);
 }
@@ -422,7 +422,7 @@
   right: 0;
   bottom: 0;
   width: calc(72px * var(--k));
-  font-size: calc(11.5px * var(--k));
+  font-size: var(--t-label);
   font-variant-numeric: tabular-nums;
   color: rgba(255, 255, 255, 0.5);
   pointer-events: none;
@@ -453,7 +453,7 @@
   justify-content: space-between;
   margin-top: calc(8px * var(--k));
   padding-right: calc(76px * var(--k));
-  font-size: calc(11.5px * var(--k));
+  font-size: var(--t-label);
   color: rgba(255, 255, 255, 0.45);
 }
 
@@ -479,7 +479,7 @@
 
 .ticket__side button {
   height: calc(40px * var(--k));
-  font-size: calc(13px * var(--k));
+  font-size: var(--t-small);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -522,7 +522,7 @@
 }
 
 .ticket__label {
-  font-size: calc(11.5px * var(--k));
+  font-size: var(--t-label);
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -537,7 +537,7 @@
 
 .seg button {
   height: calc(34px * var(--k));
-  font-size: calc(13px * var(--k));
+  font-size: var(--t-small);
   font-weight: 500;
   background: rgba(255, 255, 255, 0.06);
   color: rgba(255, 255, 255, 0.7);
@@ -586,7 +586,7 @@
   background: transparent;
   color: var(--white);
   font: inherit;
-  font-size: calc(14px * var(--k));
+  font-size: var(--t-small);
   text-align: center;
   font-variant-numeric: tabular-nums;
 }
@@ -608,7 +608,7 @@
   gap: calc(8px * var(--k));
   padding-top: calc(14px * var(--k));
   border-top: 1px dashed rgba(255, 255, 255, 0.16);
-  font-size: calc(13.5px * var(--k));
+  font-size: var(--t-small);
 }
 
 .ticket__sum div {
@@ -629,7 +629,7 @@
 .ticket__cta {
   margin-top: auto;
   height: calc(48px * var(--k));
-  font-size: calc(13px * var(--k));
+  font-size: var(--t-small);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -646,7 +646,7 @@
   margin: 0;
   display: flex;
   gap: calc(8px * var(--k));
-  font-size: calc(12.5px * var(--k));
+  font-size: var(--t-label);
   color: rgba(255, 255, 255, 0.75);
 }
 
@@ -661,7 +661,7 @@
   display: flex;
   justify-content: space-between;
   padding: calc(16px * var(--k)) calc(20px * var(--k)) calc(12px * var(--k));
-  font-size: calc(11.5px * var(--k));
+  font-size: var(--t-label);
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -711,13 +711,13 @@
 
 .watch__sym strong {
   display: block;
-  font-size: calc(14px * var(--k));
+  font-size: var(--t-small);
   font-weight: 600;
 }
 
 .watch__sym small {
   display: block;
-  font-size: calc(12px * var(--k));
+  font-size: var(--t-label);
   color: rgba(255, 255, 255, 0.5);
   overflow: hidden;
   white-space: nowrap;
@@ -729,7 +729,7 @@
   flex-direction: column;
   align-items: flex-end;
   gap: 2px;
-  font-size: calc(14px * var(--k));
+  font-size: var(--t-small);
 }
 
 .watch__fav {
@@ -773,7 +773,7 @@
   flex-direction: column;
   justify-content: space-between;
   padding: calc(10px * var(--k)) calc(12px * var(--k));
-  font-size: calc(12.5px * var(--k));
+  font-size: var(--t-label);
   transition: filter 0.2s;
 }
 
@@ -782,7 +782,7 @@
 }
 
 .heat__cell strong {
-  font-size: calc(15px * var(--k));
+  font-size: var(--t-body);
   font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
@@ -807,7 +807,7 @@
 
 .heat__cell--a strong {
   font-family: var(--serif);
-  font-size: calc(30px * var(--k));
+  font-size: var(--t-h3);
   font-weight: 400;
 }
 
@@ -824,7 +824,7 @@
   display: flex;
   gap: calc(8px * var(--k));
   max-width: 58ch;
-  font-size: calc(13px * var(--k));
+  font-size: var(--t-small);
   color: var(--ink-3);
 }
 
@@ -891,4 +891,28 @@
   .tape__status {
     display: none;
   }
+}
+
+/* ---------- Numbers in the terminal face ---------- */
+.tick,
+.chg,
+.tape__sym,
+.indices__abs,
+.watch__px,
+.cchart__ohlc,
+.cchart__axis-y,
+.cchart__axis-x,
+.cchart__last-tag,
+.heat__cell strong,
+.copy__time,
+.copy__sym {
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+/* Big index and quote values stay in the display face, with fixed-width figures. */
+.indices__value,
+.terminal__ltp {
+  font-variant-numeric: tabular-nums lining-nums;
 }

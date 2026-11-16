@@ -36,7 +36,7 @@ export function ParallaxImage({
   );
 }
 
-/** Fades and lifts content in once when it enters the viewport. */
+/** Lifts a heading block or paragraph in once when it enters the viewport. */
 export function Reveal({
   children,
   delay = 0,
@@ -49,14 +49,16 @@ export function Reveal({
   as?: "div" | "li" | "p";
 }) {
   const reduce = useReducedMotion();
+  // Rows and list items stay put: a page where every row fades in has no focal point.
+  if (as === "li") return <li className={className}>{children}</li>;
   const Comp = motion[as];
   return (
     <Comp
       className={className}
-      initial={reduce ? false : { opacity: 0, y: 36 }}
+      initial={reduce ? false : { opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-12% 0px" }}
-      transition={{ duration: 0.9, delay, ease }}
+      transition={{ duration: 0.8, delay, ease }}
     >
       {children}
     </Comp>

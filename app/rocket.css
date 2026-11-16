@@ -85,7 +85,7 @@
   padding: calc(4px * var(--k)) calc(8px * var(--k));
   background: rgba(255, 255, 255, 0.2);
   color: var(--white);
-  font-size: calc(11.5px * var(--k));
+  font-size: var(--t-label);
   font-weight: 600;
   letter-spacing: 0.08em;
 }
@@ -105,7 +105,7 @@
   padding: calc(4px * var(--k)) calc(8px * var(--k));
   background: var(--up);
   color: #04140b;
-  font-size: calc(12.5px * var(--k));
+  font-size: var(--t-label);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
@@ -114,229 +114,6 @@
 /* ---------- Inside the rocket ---------- */
 .about--short {
   padding-bottom: clamp(calc(48px * var(--k)), 6vw, calc(80px * var(--k)));
-}
-
-.rs {
-  position: relative;
-  height: 640vh;
-}
-
-.rs__sticky {
-  position: sticky;
-  top: 0;
-  height: 100svh;
-  overflow: hidden;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  align-items: center;
-  max-width: var(--max);
-  margin: 0 auto;
-  padding: calc(120px * var(--k)) var(--gutter) calc(24px * var(--k));
-  gap: calc(40px * var(--k));
-}
-
-.rs__grid {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.rs__grid span {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  border-left: 1px dashed var(--dash);
-}
-
-.rs__grid span:first-child {
-  left: 50%;
-}
-
-.rs__grid span:last-child {
-  left: 75%;
-}
-
-.rs__copy {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  max-width: calc(520px * var(--k));
-}
-
-.rs__eyebrow {
-  margin: 0 0 calc(24px * var(--k));
-  font-size: calc(12.5px * var(--k));
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.rs__steps {
-  list-style: none;
-  margin: 0 0 calc(32px * var(--k));
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 3px;
-}
-
-.rs__steps button {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: calc(8px * var(--k));
-  padding: calc(10px * var(--k)) 0 0;
-  border-top: 2px solid rgba(15, 28, 22, 0.14);
-  font-size: 0;
-  text-align: left;
-  transition: border-color 0.3s;
-}
-
-.rs__steps button span {
-  font-size: calc(12px * var(--k));
-  font-weight: 700;
-  color: var(--ink-3);
-}
-
-.rs__steps li.is-done button {
-  border-top-color: color-mix(in srgb, var(--accent) 50%, transparent);
-}
-
-.rs__steps li.is-active button {
-  border-top-color: var(--accent);
-}
-
-.rs__steps li.is-active button span {
-  color: var(--accent);
-}
-
-.rs__chip {
-  align-self: flex-start;
-  display: inline-flex;
-  align-items: center;
-  gap: calc(8px * var(--k));
-  height: calc(30px * var(--k));
-  padding: 0 calc(12px * var(--k));
-  background: var(--ink);
-  color: var(--white);
-  font-size: calc(12px * var(--k));
-  font-weight: 600;
-  letter-spacing: 0.04em;
-}
-
-.rs__panel {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.rs__title {
-  margin: calc(22px * var(--k)) 0 calc(16px * var(--k));
-  font-family: var(--serif);
-  font-size: clamp(calc(40px * var(--k)), 4.6vw, calc(72px * var(--k)));
-  font-weight: 300;
-  line-height: 1;
-  letter-spacing: -0.025em;
-}
-
-.rs__text {
-  margin: 0;
-  font-size: clamp(calc(16px * var(--k)), 1.25vw, calc(19px * var(--k)));
-  color: var(--ink-2);
-  max-width: 44ch;
-}
-
-.rs__points {
-  list-style: none;
-  margin: calc(24px * var(--k)) 0 calc(28px * var(--k));
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: calc(10px * var(--k));
-}
-
-.rs__points li {
-  display: flex;
-  align-items: center;
-  gap: calc(10px * var(--k));
-  font-weight: 500;
-}
-
-.rs__points svg {
-  flex: none;
-  width: calc(22px * var(--k));
-  height: calc(22px * var(--k));
-  padding: calc(4px * var(--k));
-  background: var(--accent);
-  color: var(--white);
-}
-
-.rs__risk {
-  margin: calc(-8px * var(--k)) 0 calc(24px * var(--k));
-  font-size: calc(12.5px * var(--k));
-  color: var(--ink-3);
-  max-width: 50ch;
-}
-
-.rs__stage {
-  position: relative;
-  height: 100%;
-  display: grid;
-  place-items: center;
-}
-
-.rs__rocket {
-  position: relative;
-  height: min(86svh, calc(820px * var(--k)));
-  aspect-ratio: 320 / 920;
-}
-
-.rs__rocket .rk {
-  height: 100%;
-  width: auto;
-}
-
-.rlabel {
-  position: absolute;
-  right: 72%;
-  translate: 0 -50%;
-  display: flex;
-  align-items: center;
-  gap: calc(10px * var(--k));
-  white-space: nowrap;
-  font-size: calc(12.5px * var(--k));
-  font-weight: 600;
-  color: var(--ink-3);
-  transition: color 0.3s;
-}
-
-.rlabel__num {
-  display: grid;
-  place-items: center;
-  width: calc(26px * var(--k));
-  height: calc(22px * var(--k));
-  background: rgba(255, 255, 255, 0.8);
-  font-size: calc(11px * var(--k));
-}
-
-.rlabel__line {
-  width: clamp(calc(30px * var(--k)), 6vw, calc(110px * var(--k)));
-  border-top: 1px dashed var(--dash);
-}
-
-.rlabel.is-active {
-  color: var(--ink);
-}
-
-.rlabel.is-active .rlabel__num {
-  background: var(--accent);
-  color: var(--white);
-}
-
-.rlabel.is-active .rlabel__line {
-  border-top: 1px solid var(--accent);
 }
 
 /* ---------- Flight rail ---------- */
@@ -391,7 +168,7 @@
   padding: 3px calc(8px * var(--k));
   background: var(--ink);
   color: var(--white);
-  font-size: calc(11.5px * var(--k));
+  font-size: var(--t-label);
   font-weight: 600;
   white-space: nowrap;
   opacity: 0;
@@ -479,53 +256,6 @@
 }
 
 @media (max-width: 900px) {
-  .rs {
-    height: 560vh;
-  }
-
-  .rs__sticky {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
-    align-items: start;
-    padding-top: calc(124px * var(--k));
-    gap: calc(8px * var(--k));
-  }
-
-  .rs__grid {
-    display: none;
-  }
-
-  .rs__stage {
-    position: absolute;
-    right: -6%;
-    bottom: 0;
-    height: 62%;
-    width: 50%;
-    z-index: 1;
-    opacity: 0.95;
-  }
-
-  .rs__rocket {
-    height: 100%;
-  }
-
-  .rlabel {
-    display: none;
-  }
-
-  .rs__title {
-    font-size: calc(38px * var(--k));
-  }
-
-  .rs__text,
-  .rs__points,
-  .rs__risk {
-    max-width: 60%;
-  }
-
-  .rs__steps {
-    margin-bottom: calc(20px * var(--k));
-  }
 
   .liftoff {
     left: auto;
@@ -706,34 +436,6 @@
 }
 
 /* ---------- Growth: pinned scene ---------- */
-.growth {
-  padding-top: 0 !important;
-}
-
-.growth__track {
-  position: relative;
-  height: 260vh;
-}
-
-.growth__pin {
-  position: sticky;
-  top: 0;
-  height: 100svh;
-  display: flex;
-  flex-direction: column;
-  padding: calc(128px * var(--k)) 0 calc(24px * var(--k));
-}
-
-.growth__pin .gchart {
-  flex: 1;
-  min-height: 0;
-  height: auto;
-  margin-top: calc(28px * var(--k));
-}
-
-.gcaption {
-  display: none;
-}
 
 .gsteps__dot {
   flex: none;
@@ -746,11 +448,6 @@
 }
 
 /* Short laptop screens: drop the intro paragraph so the chart keeps its height. */
-@media (max-height: 760px) and (min-width: 721px) {
-  .growth__pin .growth__head .lead {
-    display: none;
-  }
-}
 
 @media (max-width: 720px) {
   /* Hero graph: draw it in the lower part of the hero so it keeps a chart shape on a tall screen. */
@@ -764,62 +461,6 @@
   }
 
   /* Growth: icons stay on the curve, the words move into a list underneath. */
-  .gstage__copy {
-    display: none;
-  }
-
-  .growth__track {
-    height: 240vh;
-  }
-
-  .growth__pin {
-    padding-top: 118px;
-  }
-
-  .growth__pin .growth__head .lead {
-    display: none;
-  }
-
-  .growth__pin .gchart {
-    margin-top: 18px;
-  }
-
-  .gcaption {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 12px;
-    min-height: 84px;
-    padding: 14px 16px;
-    background: rgba(255, 255, 255, 0.7);
-  }
-
-  .gcaption__inner {
-    display: flex;
-    gap: 12px;
-  }
-
-  .gcaption strong {
-    display: block;
-    font-family: var(--serif);
-    font-size: 19px;
-    font-weight: 400;
-    line-height: 1.2;
-  }
-
-  .gcaption small {
-    display: block;
-    margin-top: 2px;
-    font-size: 14px;
-    color: var(--ink-2);
-  }
-
-  .gcaption__count {
-    flex: none;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--ink-3);
-  }
 
   /* Markets: the chart needs every pixel on a phone, so the rocket flies past it. */
   .ra-markets {
@@ -832,26 +473,11 @@
 }
 
 /* Milestone labels keep their natural width even near the chart edge. */
-.gstage__copy {
-  width: max-content;
-}
 
 /* Momentum sits below its point so it never meets the final label above it. */
-.gstage--below {
-  align-items: flex-start;
-  translate: -14px -14px;
-}
 
-.gstage--below .gstage__copy {
-  margin: calc(46px * var(--k)) 0 0;
-}
 
 /* Mid-size screens: titles only on the curve, so the labels never crowd. */
-@media (max-width: 1200px) {
-  .gstage__copy small {
-    display: none;
-  }
-}
 
 /* The flicker redraws the whole rocket artwork every frame, so the travelling rocket keeps a steady flame. */
 .story__rocket .rk__flame {
@@ -885,7 +511,7 @@
   will-change: opacity, transform;
 }
 
-/* Sliding reveal used by the hero line and the growth lines. */
+/* Sliding reveal used by the hero line. */
 .reveal {
   position: absolute;
   inset: 0;
@@ -954,20 +580,6 @@
   }
 }
 
-/* Growth: milestone labels and the shaded area fade on their own GPU layers. */
-.gstage,
-.gfill {
-  will-change: opacity, transform;
-}
-
-.gchart__area > svg.gfill {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-}
-
 /* ---------- Launch: the rocket's last scene, opening Health and Wealth ---------- */
 .tabs {
   padding-top: 0 !important;
@@ -975,7 +587,7 @@
 
 .launch {
   position: relative;
-  height: 320vh;
+  height: 260vh;
 }
 
 .launch__anchor {
@@ -1042,7 +654,7 @@
 .launch__title {
   margin: 0;
   font-family: var(--serif);
-  font-size: clamp(calc(44px * var(--k)), 6.4vw, calc(104px * var(--k)));
+  font-size: var(--t-h1);
   font-weight: 300;
   line-height: 0.96;
   letter-spacing: -0.03em;
@@ -1051,7 +663,7 @@
 .launch__lead {
   margin: calc(16px * var(--k)) 0 calc(8px * var(--k));
   font-family: var(--serif);
-  font-size: clamp(calc(20px * var(--k)), 2vw, calc(32px * var(--k)));
+  font-size: var(--t-h4);
   font-weight: 300;
   line-height: 1.2;
   max-width: 30ch;
@@ -1084,7 +696,7 @@
   left: 50%;
   top: 19%;
   translate: -50% 0;
-  font-size: calc(12px * var(--k));
+  font-size: var(--t-label);
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -1095,7 +707,7 @@
   position: absolute;
   top: 34%;
   font-family: var(--serif);
-  font-size: clamp(calc(52px * var(--k)), 9vw, calc(180px * var(--k)));
+  font-size: var(--t-display);
   font-weight: 300;
   line-height: 1;
   letter-spacing: -0.035em;
@@ -1157,7 +769,7 @@
   padding: calc(6px * var(--k)) calc(10px * var(--k));
   background: var(--accent);
   color: var(--white);
-  font-size: calc(10.5px * var(--k));
+  font-size: var(--t-label);
   font-weight: 700;
   letter-spacing: 0.1em;
   text-align: center;
@@ -1195,7 +807,7 @@
 
 @media (max-width: 720px) {
   .launch {
-    height: 280vh;
+    height: 240vh;
   }
 
   .launch__word {
@@ -1209,4 +821,20 @@
   .launch__stage {
     --lw: 92px;
   }
+}
+
+/* ---------- 3D rocket ---------- */
+/* The WebGL rocket fills the same box as the flat drawing; the drawing hides once 3D is ready. */
+.story__gl {
+  display: none;
+  width: 100%;
+  aspect-ratio: 320 / 920;
+}
+
+.story__rocket.is-3d .story__gl {
+  display: block;
+}
+
+.story__rocket.is-3d > .rk {
+  display: none;
 }

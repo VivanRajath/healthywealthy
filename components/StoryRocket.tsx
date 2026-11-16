@@ -1,5 +1,7 @@
 "use client";
 
+import type { Rocket3D } from "@/lib/rocket3d";
+
 import { useEffect, useRef, useState } from "react";
 import { cancelFrame, frame, motion, motionValue, useMotionValueEvent, type MotionStyle } from "framer-motion";
 import { Rocket, EXPLODED_BOX } from "./Rocket";
@@ -84,9 +86,39 @@ const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
 export function StoryRocket() {
   const wrap = useRef<HTMLDivElement>(null);
+  const canvas = useRef<HTMLCanvasElement>(null);
   const explode = useRef(motionValue(0)).current;
   const [active, setActive] = useState<number | null>(null);
   useMotionValueEvent(rocketActive, "change", (v) => setActive(v));
+
+  /*
+    The 3D rocket loads after the page is up. Until it is ready, or if the device has no
+    WebGL, the flat drawing is shown in its place.
+  */
+  const r3d = useRef<Rocket3D | null>(null);
+  useEffect(() => {
+    let gone = false;
+    import("@/lib/rocket3d").then(({ createRocket3D }) => {
+      if (gone || !canvas.current || !wrap.current) return;
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const r = createRocket3D(canvas.current, { reduce });
+      if (!r) return;
+      r3d.current = r;
+      const w = wrap.current.offsetWidth || 200;
+      r.resize(w, w * RATIO);
+      r.setExplode(explode.get());
+      r.setActive(rocketActive.get());
+      wrap.current.classList.add("is-3d");
+    });
+    return () => {
+      gone = true;
+      r3d.current?.destroy();
+      r3d.current = null;
+    };
+  }, [explode]);
+  useEffect(() => {
+    r3d.current?.setActive(active);
+  }, [active]);
 
   useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -104,7 +136,8 @@ export function StoryRocket() {
     let lastW = "";
 
     // Values worked out in the read step, applied in the render step.
-    const out = { tf: "", width: "", fly: false, ex: 0, show: false };
+    const out = { tf: "", width: "", fly: false, ex: 0, show: false, seen: true };
+    let lastSeen = true;
 
     /*
       Runs in the animation library's own frame loop: every measurement happens in the
@@ -206,6 +239,9 @@ export function StoryRocket() {
       out.tf = `translate3d(${(cur.x - BASE / 2).toFixed(1)}px, ${(cur.y - (BASE * RATIO) / 2).toFixed(1)}px, 0) rotate(${cur.r.toFixed(2)}deg) scale(${scale.toFixed(4)})`;
       out.fly = inFlight || a.flame || b.flame;
       out.ex = lerp(a.e, b.e, e);
+      // Whether any of the rocket is on screen, so the 3D view can stop drawing when it is not.
+      const hh = (BASE * RATIO * scale) / 2;
+      out.seen = cur.y + hh > 0 && cur.y - hh < vh;
       frame.render(write);
 
       // Settled: same scroll position and the rocket has caught up with its target.
@@ -220,12 +256,19 @@ export function StoryRocket() {
       if (!node) return;
       if (!out.show) {
         node.style.opacity = "0";
+        r3d.current?.setVisible(false);
         return;
       }
       node.style.opacity = "1";
+      if (out.seen !== lastSeen) {
+        r3d.current?.setVisible(out.seen);
+        lastSeen = out.seen;
+      }
       if (out.width !== lastW) {
         node.style.width = out.width;
         lastW = out.width;
+        const w = parseFloat(out.width);
+        r3d.current?.resize(w, w * RATIO);
       }
       if (out.tf !== lastT) {
         node.style.transform = out.tf;
@@ -234,10 +277,12 @@ export function StoryRocket() {
       if (out.fly !== flying) {
         node.classList.toggle("is-flying", out.fly);
         flying = out.fly;
+        r3d.current?.setFlying(out.fly);
       }
       if (Math.abs(out.ex - lastE) > 0.0005) {
         explode.set(out.ex);
         lastE = out.ex;
+        r3d.current?.setExplode(out.ex);
       }
     };
 
@@ -276,6 +321,7 @@ export function StoryRocket() {
     <div className="story" aria-hidden>
       <div className="story__rocket" ref={wrap}>
         <Rocket explode={explode} active={active} exploded />
+        <canvas ref={canvas} className="story__gl" />
       </div>
     </div>
   );

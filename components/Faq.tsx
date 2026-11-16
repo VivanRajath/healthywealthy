@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { Plus } from "lucide-react";
-import { Reveal, ease } from "./Motion";
+import * as Accordion from "@radix-ui/react-accordion";
+import { Plus, Minus } from "lucide-react";
+import { Reveal } from "./Motion";
 import { riskLine } from "@/lib/content";
 
 type Cat = "All" | "Health" | "Wealth" | "Challenge";
@@ -70,11 +70,14 @@ const cats: Cat[] = ["All", "Health", "Wealth", "Challenge"];
 
 export function Faq() {
   const [cat, setCat] = useState<Cat>("All");
-  const [open, setOpen] = useState<string | null>(faqs[0].q);
+  const [open, setOpen] = useState<string>(faqs[0].q);
   const list = faqs.filter((f) => cat === "All" || f.cat === cat);
 
   return (
     <section className="faq" id="faq">
+      <span className="ghost" data-speed="0.35" aria-hidden>
+        {"Ask"}
+      </span>
       <div className="faq__side">
         <Reveal>
           <span className="marker" />
@@ -92,37 +95,34 @@ export function Faq() {
         </div>
       </div>
 
-      <ul className="faq__list">
-        {list.map((f) => {
-          const isOpen = open === f.q;
-          const id = `faq-${faqs.indexOf(f)}`;
-          return (
-            <li key={f.q} className={isOpen ? "is-open" : ""}>
-              <button aria-expanded={isOpen} aria-controls={id} onClick={() => setOpen(isOpen ? null : f.q)}>
-                <span className="faq__cat">{f.cat}</span>
-                <span className="faq__q">{f.q}</span>
-                <span className="faq__icon" aria-hidden>
-                  <Plus size={18} />
-                </span>
-              </button>
-              <AnimatePresence initial={false}>
-                {isOpen && (
-                  <motion.div
-                    id={id}
-                    className="faq__a"
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.35, ease }}
-                  >
-                    <p>{f.a}</p>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </li>
-          );
-        })}
-      </ul>
+      {/* Radix Accordion: arrow keys, Home and End move between questions; state is announced. */}
+      <Accordion.Root
+        type="single"
+        collapsible
+        value={open}
+        onValueChange={setOpen}
+        className="faq__list"
+      >
+        {list.map((f) => (
+          <Accordion.Item key={f.q} value={f.q} className="faq__item">
+            <Accordion.Header asChild>
+              <h3 className="faq__h">
+                <Accordion.Trigger className="faq__trigger">
+                  <span className="faq__cat">{f.cat}</span>
+                  <span className="faq__q">{f.q}</span>
+                  <span className="faq__icon" aria-hidden>
+                    <Plus className="faq__plus" size={18} />
+                    <Minus className="faq__minus" size={18} />
+                  </span>
+                </Accordion.Trigger>
+              </h3>
+            </Accordion.Header>
+            <Accordion.Content className="faq__a">
+              <p>{f.a}</p>
+            </Accordion.Content>
+          </Accordion.Item>
+        ))}
+      </Accordion.Root>
     </section>
   );
 }

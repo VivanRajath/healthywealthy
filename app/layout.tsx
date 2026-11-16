@@ -1,11 +1,15 @@
 import type { Metadata, Viewport } from "next";
-import { Fraunces, Manrope } from "next/font/google";
+import { Fraunces, Manrope, IBM_Plex_Mono } from "next/font/google";
 import { ModeProvider } from "@/components/ModeProvider";
 import { MarketProvider } from "@/components/MarketProvider";
+import { SmoothScroll } from "@/components/SmoothScroll";
+import { Depth3D } from "@/components/Depth3D";
+import { Backdrop } from "@/components/Backdrop";
 import "./globals.css";
 import "./markets.css";
 import "./sections.css";
 import "./rocket.css";
+import "./inside.css";
 import "./classes.css";
 import "./about.css";
 
@@ -14,6 +18,14 @@ const display = Fraunces({
   variable: "--font-display",
   display: "swap",
   axes: ["opsz", "SOFT"],
+});
+
+// Prices, changes and chart scales only, so the trading side reads like a terminal.
+const mono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-mono",
+  display: "swap",
 });
 
 const sans = Manrope({
@@ -37,14 +49,19 @@ const boot = `try{var m=localStorage.getItem('hw-mode');if(m==='wealth'||m==='he
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" data-mode="health" className={`${display.variable} ${sans.variable}`} suppressHydrationWarning>
+    <html lang="en" data-mode="health" className={`${display.variable} ${sans.variable} ${mono.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: boot }} />
       </head>
       {/* Browser extensions (ColorZilla, Grammarly and others) add attributes to <body> before React loads. */}
       <body suppressHydrationWarning>
         <ModeProvider>
-          <MarketProvider>{children}</MarketProvider>
+          <MarketProvider>
+            <SmoothScroll />
+            <Depth3D />
+            <Backdrop />
+            {children}
+          </MarketProvider>
         </ModeProvider>
       </body>
     </html>

@@ -5,6 +5,7 @@ import { Star, Info, ShieldCheck, ChartCandlestick, Link2, Wallet, KeyRound, Per
 import { useMarket } from "./MarketProvider";
 import { Tick, Change } from "./TickerTape";
 import { Reveal } from "./Motion";
+import { SButton } from "./SButton";
 import { riskLine } from "@/lib/content";
 import { fmt, makeCandles, axisLabels, timeframes, initialStocks, initialIndices, type Timeframe, type Quote, type Candle, type LiveCandle } from "@/lib/market";
 
@@ -276,9 +277,9 @@ function CopyPanel() {
         </ul>
       </div>
 
-      <a href="#enquiry" className="ticket__cta copy__cta">
+      <SButton href="#enquiry" variant="light" className="copy__cta">
         Link your account
-      </a>
+      </SButton>
     </div>
   );
 }
@@ -293,6 +294,9 @@ export function Markets() {
 
   return (
     <section className="markets" id="markets">
+      <span className="ghost" data-speed="0.35" aria-hidden>
+        {"NSE"}
+      </span>
       <div className="markets__head">
         <Reveal>
           <span className="marker" />
@@ -324,7 +328,7 @@ export function Markets() {
         ))}
       </div>
 
-      <div className="terminal">
+      <div className="terminal" data-depth>
         <span className="corner corner--tl" />
         <span className="corner corner--tr" />
         <span className="corner corner--bl" />

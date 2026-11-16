@@ -51,6 +51,9 @@ export function Challenge() {
 
   return (
     <section className="challenge" id="challenge">
+      <span className="ghost" data-speed="0.35" aria-hidden>
+        {"30"}
+      </span>
       <div className="challenge__head">
         <Reveal>
           <span className="marker" />
@@ -66,7 +69,7 @@ export function Challenge() {
         </Reveal>
       </div>
 
-      <div className="challenge__grid">
+      <div className="challenge__grid" data-depth>
         <div className="streak">
           <div className="streak__theme">
             <CalendarDays size={18} strokeWidth={1.6} aria-hidden />

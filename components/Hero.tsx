@@ -2,11 +2,14 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
-import { ArrowRight, HeartPulse, Layers, CalendarCheck } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Video, ChartCandlestick, CalendarCheck } from "lucide-react";
 import { ease } from "./Motion";
 import { SButton } from "./SButton";
 import { NiftyRocket } from "./NiftyRocket";
 import { RocketAnchor } from "./StoryRocket";
+import { useMarket } from "./MarketProvider";
+import { useMode } from "./ModeProvider";
+import { fmt, pct } from "@/lib/market";
 import { img } from "@/lib/content";
 
 /* Final card position as insets of the viewport (top, right, bottom, left in %). */
@@ -25,11 +28,48 @@ function useIsMobile() {
   return m;
 }
 
-const tiles = [
-  { icon: HeartPulse, title: "Free daily yoga on Google Meet" },
-  { icon: Layers, title: "Copy-trading from a master account" },
-  { icon: CalendarCheck, title: "30 day challenge and leaderboard" },
-];
+/* What is on today, beside the card: the next session, the market and this month's challenge. */
+function Today() {
+  const { indices, live, open } = useMarket();
+  const { setMode } = useMode();
+  const nifty = indices[0];
+  const c = pct(nifty);
+  const tiles = [
+    { icon: Video, label: "Next session", value: "6:30 am", line: "Live on Google Meet", href: "#classes", mode: "health" as const },
+    {
+      icon: ChartCandlestick,
+      label: live ? (open ? "NIFTY 50, live" : "NIFTY 50, at close") : "NIFTY 50",
+      value: fmt(nifty.price),
+      line: `${c >= 0 ? "+" : ""}${c.toFixed(2)}% today`,
+      href: "#markets",
+      tone: c >= 0 ? "is-up" : "is-down",
+      mono: true,
+    },
+    { icon: CalendarCheck, label: "December challenge", value: "Core and posture", line: "Starts 1 December", href: "#challenge" },
+  ];
+  return (
+    <ul className="hero__tiles">
+      {tiles.map((t) => {
+        const Icon = t.icon;
+        return (
+          <li key={t.label}>
+            <a href={t.href} className="htile" onClick={() => t.mode && setMode(t.mode)}>
+              <span className="htile__top">
+                <span className="htile__chip">
+                  <Icon size={16} strokeWidth={1.8} aria-hidden />
+                </span>
+                {t.label}
+                <ArrowUpRight className="htile__go" size={16} strokeWidth={1.8} aria-hidden />
+              </span>
+              <strong className={`htile__value${t.mono ? " is-mono" : ""}`}>{t.value}</strong>
+              <span className={`htile__line ${t.tone ?? ""}`}>{t.line}</span>
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
 
 export function Hero() {
   const ref = useRef<HTMLElement>(null);
@@ -208,20 +248,7 @@ export function Hero() {
             <h2 className="hero__after-title">Small gains, added daily</h2>
             <p className="hero__after-text">Free live sessions for your body. Copy-trading for your money.</p>
           </div>
-          <ul className="hero__tiles">
-            {tiles.map((t) => {
-              const Icon = t.icon;
-              return (
-                <li key={t.title} className="htile">
-                  <span className="htile__chip">
-                    <Icon size={14} strokeWidth={2} aria-hidden />
-                  </span>
-                  <span className="htile__title">{t.title}</span>
-                  <Icon className="htile__art" size={120} strokeWidth={0.6} aria-hidden />
-                </li>
-              );
-            })}
-          </ul>
+          <Today />
         </motion.div>
       </div>
     </section>

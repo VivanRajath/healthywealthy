@@ -1,0 +1,404 @@
+/* ---------- Inside the rocket ---------- */
+/*
+  A service index: sticky list of parts on the left, the rocket on a sticky blueprint
+  frame in the middle beside a ruler, and one article per part scrolling on the right.
+*/
+.rs {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: var(--sec-top) var(--gutter) var(--sec-bottom);
+  --rs-left: clamp(calc(180px * var(--k)), 17vw, calc(240px * var(--k)));
+  --rs-frame-h: min(64svh, calc(580px * var(--k)));
+}
+
+.rs__intro {
+  display: grid;
+  grid-template-columns: var(--rs-left) 1fr;
+  gap: clamp(calc(24px * var(--k)), 3vw, calc(48px * var(--k)));
+  align-items: start;
+  padding-top: calc(18px * var(--k));
+  border-top: 1px dashed var(--dash);
+}
+
+.rs__label {
+  position: relative;
+  font-family: var(--mono);
+  font-size: var(--t-label);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+
+.rs__label .marker {
+  position: absolute;
+  top: calc(-22px * var(--k));
+  left: 0;
+}
+
+.rs__heading {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: var(--t-h2);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  max-width: 14ch;
+}
+
+.rs__body {
+  position: relative;
+  margin-top: clamp(calc(48px * var(--k)), 6vw, calc(88px * var(--k)));
+  display: grid;
+  grid-template-columns: var(--rs-left) minmax(calc(220px * var(--k)), 0.6fr) 1fr;
+  gap: clamp(calc(24px * var(--k)), 3vw, calc(48px * var(--k)));
+}
+
+/* ---------- Left: sticky index ---------- */
+.rs__left {
+  position: relative;
+}
+
+.rs__index {
+  position: sticky;
+  top: calc(var(--header) + calc(48px * var(--k)));
+  display: grid;
+}
+
+.rs__group {
+  padding: calc(8px * var(--k)) calc(10px * var(--k));
+  background: var(--paper-2);
+  font-family: var(--mono);
+  font-size: var(--t-label);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.rs__index button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: calc(12px * var(--k));
+  min-height: calc(44px * var(--k));
+  padding: 0 calc(10px * var(--k));
+  border-bottom: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: var(--t-label);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-align: left;
+  color: var(--ink-2);
+  transition: background-color 0.35s, color 0.35s;
+}
+
+.rs__index button span:last-child {
+  color: var(--ink-3);
+}
+
+.rs__index button:hover {
+  color: var(--ink);
+  background: var(--white);
+}
+
+/* The open part, inverted like a selected row. */
+.rs__index button.is-active {
+  background: var(--ink);
+  color: var(--white);
+}
+
+.rs__index button.is-active span:last-child {
+  color: var(--accent-2);
+}
+
+/* ---------- Middle: ruler and sticky frame ---------- */
+.rs__media {
+  position: relative;
+}
+
+.rs__ruler {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: calc(10px * var(--k));
+  translate: -50% 0;
+  background: repeating-linear-gradient(var(--dash) 0 1px, transparent 1px 9px);
+}
+
+/* Progress through the parts, filling down the ruler. */
+.rs__ruler i {
+  position: absolute;
+  inset: 0 calc(4px * var(--k));
+  background: var(--accent);
+  transform-origin: top;
+}
+
+.rs__frame {
+  position: sticky;
+  top: calc(var(--header) + (100svh - var(--header) - var(--rs-frame-h)) / 2);
+  height: var(--rs-frame-h);
+  display: grid;
+  place-items: center;
+  border: 1px dashed var(--dash);
+  background:
+    linear-gradient(var(--line) 1px, transparent 1px) 0 0 / 100% calc(32px * var(--k)),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0 / calc(32px * var(--k)) 100%,
+    color-mix(in srgb, var(--accent-soft) 45%, var(--paper));
+}
+
+.rs__rocket {
+  position: relative;
+  height: calc(100% - calc(28px * var(--k)));
+  aspect-ratio: 320 / 920;
+}
+
+.rs__meta {
+  position: absolute;
+  left: 0;
+  bottom: calc(-30px * var(--k));
+  display: flex;
+  gap: calc(10px * var(--k));
+  font-family: var(--mono);
+  font-size: var(--t-label);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.rs__meta span {
+  color: var(--ink-3);
+}
+
+/* Numbered markers beside each part, with a short leader line. */
+.rlabel {
+  position: absolute;
+  right: 88%;
+  translate: 0 -50%;
+  display: flex;
+  align-items: center;
+  gap: calc(4px * var(--k));
+  color: var(--ink-3);
+}
+
+.rlabel__num {
+  display: grid;
+  place-items: center;
+  width: calc(26px * var(--k));
+  height: calc(20px * var(--k));
+  background: var(--white);
+  font-family: var(--mono);
+  font-size: var(--t-label);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.rlabel__line {
+  width: calc(14px * var(--k));
+  border-top: 1px dashed var(--dash);
+}
+
+.rlabel.is-active .rlabel__num {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.rlabel.is-active .rlabel__line {
+  border-top: 1px solid var(--accent);
+}
+
+/* ---------- Right: one article per part ---------- */
+.rs__content {
+  min-width: 0;
+}
+
+.rpart {
+  min-height: 62svh;
+  padding: calc(28px * var(--k)) 0 calc(56px * var(--k));
+  border-top: 1px solid var(--line);
+}
+
+.rpart:last-child {
+  min-height: 0;
+  padding-bottom: calc(24px * var(--k));
+}
+
+.rpart__head,
+.rpart__body {
+  opacity: 0.28;
+  transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+}
+
+.rpart__body {
+  transform: translateY(calc(12px * var(--k)));
+}
+
+.rpart.is-active .rpart__head,
+.rpart.is-active .rpart__body {
+  opacity: 1;
+  transform: none;
+}
+
+.rpart__head {
+  display: flex;
+  justify-content: space-between;
+  gap: calc(24px * var(--k));
+}
+
+.rpart__num {
+  font-family: var(--mono);
+  font-size: var(--t-label);
+  color: var(--accent);
+}
+
+.rpart__title {
+  margin: calc(10px * var(--k)) 0 calc(6px * var(--k));
+  font-family: var(--serif);
+  font-size: var(--t-h3);
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+}
+
+.rpart__tag {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: var(--t-label);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* Dotted square with the part's icon, like a stamp on a drawing. */
+.rpart__icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: calc(56px * var(--k));
+  height: calc(56px * var(--k));
+  background: radial-gradient(circle, var(--dash) 1px, transparent 1.4px) 0 0 / calc(6px * var(--k)) calc(6px * var(--k));
+  color: var(--accent);
+}
+
+.rpart__body {
+  margin-top: clamp(calc(28px * var(--k)), 4vw, calc(56px * var(--k)));
+  max-width: 46ch;
+}
+
+.rpart__text {
+  margin: 0;
+  font-size: var(--t-lead);
+  color: var(--ink-2);
+}
+
+.rpart__points {
+  list-style: none;
+  margin: calc(18px * var(--k)) 0 calc(20px * var(--k));
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(8px * var(--k));
+}
+
+.rpart__points li {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(8px * var(--k));
+  height: calc(34px * var(--k));
+  padding: 0 calc(12px * var(--k)) 0 calc(5px * var(--k));
+  background: var(--white);
+  font-size: var(--t-small);
+  font-weight: 500;
+}
+
+.rpart__points svg {
+  width: calc(24px * var(--k));
+  height: calc(24px * var(--k));
+  padding: calc(5px * var(--k));
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.rpart__risk {
+  margin: 0 0 calc(18px * var(--k));
+  font-size: var(--t-label);
+  color: var(--ink-3);
+}
+
+/* ---------- Tablet and phone ---------- */
+@media (max-width: 1080px) {
+  .rs__body {
+    grid-template-columns: minmax(calc(200px * var(--k)), 0.7fr) 1fr;
+  }
+
+  .rs__left {
+    display: none;
+  }
+
+  .rs__intro {
+    grid-template-columns: 1fr;
+    gap: calc(28px * var(--k));
+  }
+}
+
+@media (max-width: 720px) {
+  /* Articles on the left, the rocket standing in a narrow sticky column on the right. */
+  .rs__body {
+    grid-template-columns: 1fr 30%;
+    gap: calc(16px * var(--k));
+  }
+
+  .rs__content {
+    order: -1;
+  }
+
+  .rs__ruler,
+  .rlabel {
+    display: none;
+  }
+
+  .rs {
+    --rs-frame-h: 62svh;
+  }
+
+  .rs__frame {
+    border: 0;
+    background: none;
+  }
+
+  .rs__frame .corner {
+    display: none;
+  }
+
+  .rs__rocket {
+    width: 100%;
+    height: auto;
+    max-height: 100%;
+  }
+
+  .rs__meta {
+    left: 50%;
+    translate: -50% 0;
+    bottom: calc(-24px * var(--k));
+    white-space: nowrap;
+  }
+
+  .rs__meta span {
+    display: none;
+  }
+
+  .rpart {
+    min-height: 70svh;
+  }
+
+  .rpart__icon {
+    width: calc(44px * var(--k));
+    height: calc(44px * var(--k));
+  }
+
+  .rpart__title {
+    font-size: var(--t-h4);
+  }
+
+  .rpart__text {
+    font-size: var(--t-body);
+  }
+}

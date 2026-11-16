@@ -5,7 +5,6 @@ import { RocketServices } from "@/components/RocketServices";
 import { StoryRocket } from "@/components/StoryRocket";
 import { Tabs } from "@/components/Tabs";
 import { Challenge } from "@/components/Challenge";
-import { Growth } from "@/components/Growth";
 import { Markets } from "@/components/Markets";
 import { Testimonials } from "@/components/Testimonials";
 import { Faq } from "@/components/Faq";
@@ -23,7 +22,6 @@ export default function Home() {
         <RocketServices />
         <Tabs />
         <Challenge />
-        <Growth />
         <Markets />
         <Testimonials />
         <Faq />

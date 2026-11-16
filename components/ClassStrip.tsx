@@ -17,7 +17,7 @@ export function ClassStrip() {
           <p className="lead">Six live classes, free for members.</p>
         </Reveal>
       </div>
-      <div className="cstrip__grid">
+      <div className="cstrip__grid" data-depth>
         {classes.map((c, i) => (
           <Reveal key={c.slug} delay={(i % 3) * 0.08} className="cstrip__cell">
             <a href={`/classes/${c.slug}/`} className="ctile ctile--big">
