@@ -5,7 +5,6 @@ import { motion, useInView, useReducedMotion } from "framer-motion";
 import { Flame, Trophy, Crown, CalendarDays, Medal, Rocket as RocketIcon } from "lucide-react";
 import { Reveal, ease } from "./Motion";
 import { SButton } from "./SButton";
-import { RocketAnchor } from "./StoryRocket";
 
 /* Placeholder leaderboard. Replace with real member data from the backend. */
 const month = [
@@ -59,8 +58,7 @@ export function Challenge() {
         </Reveal>
         <Reveal delay={0.1} className="challenge__intro">
           <p className="lead">
-            Show up every day for 30 days. Every session you attend adds to your streak, and the most consistent members
-            top the board at the end of the month.
+            Show up 30 days in a row. Top the board.
           </p>
           <SButton href="#enquiry" variant="dark">
             Join the challenge
@@ -70,7 +68,6 @@ export function Challenge() {
 
       <div className="challenge__grid">
         <div className="streak">
-          <RocketAnchor id="challenge" className="ra-challenge" rotate={14} />
           <div className="streak__theme">
             <CalendarDays size={18} strokeWidth={1.6} aria-hidden />
             <span>

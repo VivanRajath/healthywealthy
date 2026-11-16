@@ -58,17 +58,16 @@ export const content: Record<Mode, ModeContent> = {
     label: "Health",
     image: img("1544367567-0f2fcb009e0b"),
     imageAlt: "A woman holding a yoga pose by the sea at dusk",
-    bannerTitle: "A live yoga and movement session every morning, free for members.",
-    bannerText:
-      "30 to 60 minutes on Google Meet at the same time every day. Join from anywhere and shape the routine around your own body.",
+    bannerTitle: "Free live yoga, every morning.",
+    bannerText: "30 to 60 minutes on Google Meet.",
     pillarsHeading: "Show up for one session a day.",
-    pillarsSub: "That is the whole commitment. The routine, the coach and the community take care of the rest.",
+    pillarsSub: "That is the whole commitment.",
     pillars: [
       {
         icon: Video,
         title: "Live on Google Meet",
         line: "A fixed morning time, the same link every day.",
-        detail: "Sessions run 30 to 60 minutes. Join with your camera on or off, from your living room, a hotel or a park.",
+        detail: "30 to 60 minutes, camera on or off.",
         screen: {
           title: "Today's session",
           metric: "6:30",
@@ -87,7 +86,7 @@ export const content: Record<Mode, ModeContent> = {
         icon: Flower2,
         title: "Yoga and breathwork",
         line: "Mobility, balance and calm to start the day.",
-        detail: "Guided flows for every level, with breathwork to settle the mind before the day gets busy.",
+        detail: "Guided flows for every level.",
         screen: {
           title: "This week",
           metric: "5 of 7",
@@ -106,7 +105,7 @@ export const content: Record<Mode, ModeContent> = {
         icon: Dumbbell,
         title: "Strength and movement",
         line: "Bodyweight strength and cardio, no equipment needed.",
-        detail: "Short strength blocks build into the flow on alternate days so you get stronger, not just more flexible.",
+        detail: "Strength blocks on alternate days.",
         screen: {
           title: "Movement",
           metric: "Day 14",
@@ -124,8 +123,8 @@ export const content: Record<Mode, ModeContent> = {
       {
         icon: SlidersHorizontal,
         title: "Your routine, your pace",
-        line: "Adjust the routine to find your own best day.",
-        detail: "Swap poses, shorten a session or add a second one. The best routine is the one you keep.",
+        line: "Adjust it to suit you.",
+        detail: "Swap poses or shorten a session.",
         screen: {
           title: "My routine",
           metric: "35",
@@ -146,17 +145,16 @@ export const content: Record<Mode, ModeContent> = {
     label: "Wealth",
     image: img("1559526324-4b87b5e36e44"),
     imageAlt: "Hands on a laptop showing a trading dashboard on a wooden desk",
-    bannerTitle: "Link your trading account and copy a master account, trade by trade.",
-    bannerText:
-      "Your money never leaves your own account. You can withdraw any time, and you can stop copying whenever you choose.",
+    bannerTitle: "Copy a master account, trade by trade.",
+    bannerText: "Your money stays in your own account.",
     pillarsHeading: "Copy-trading, with you in control.",
-    pillarsSub: "Four things to know before you link an account.",
+    pillarsSub: "Four things to know.",
     pillars: [
       {
         icon: Link2,
         title: "Link your own account",
         line: "Connect the trading account you already hold.",
-        detail: "Your funds stay in your name with your broker. We never hold your money.",
+        detail: "We never hold your money.",
         screen: {
           title: "Linked account",
           metric: "Active",
@@ -174,8 +172,8 @@ export const content: Record<Mode, ModeContent> = {
       {
         icon: Copy,
         title: "Trades copied automatically",
-        line: "Every master trade is mirrored in your account.",
-        detail: "When the master account places a trade, the same trade is placed in your linked account, sized to your balance.",
+        line: "Master trades mirrored in your account.",
+        detail: "Sized to your balance.",
         screen: {
           title: "Master trades",
           metric: "Live",
@@ -193,8 +191,8 @@ export const content: Record<Mode, ModeContent> = {
       {
         icon: KeyRound,
         title: "Full control, always",
-        line: "Withdraw any time. Change your password to stop.",
-        detail: "You keep full withdrawal rights. If you change your trading account password, copying disconnects automatically.",
+        line: "Withdraw any time.",
+        detail: "A password change disconnects copying.",
         screen: {
           title: "Your controls",
           metric: "Yours",
@@ -213,7 +211,7 @@ export const content: Record<Mode, ModeContent> = {
         icon: Percent,
         title: "Profit share only",
         line: "We share in profits. No other fees.",
-        detail: "The company keeps 50% of the profit on copied trades. There is no subscription, no joining fee and no other charge.",
+        detail: "50% of profit. No subscription or joining fee.",
         screen: {
           title: "Fees",
           metric: "50%",

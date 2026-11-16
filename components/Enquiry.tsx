@@ -1,11 +1,10 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, ArrowUpRight, CircleCheck, Mail, MessageCircle, Phone, Camera, Play, Briefcase, AtSign } from "lucide-react";
 import { ParallaxImage, Reveal, ease } from "./Motion";
 import { img } from "@/lib/content";
-import { RocketAnchor } from "./StoryRocket";
 
 const interests = ["Daily yoga sessions", "Copy-trading", "30 day challenge", "Both health and wealth"];
 
@@ -24,17 +23,6 @@ export function Enquiry() {
   const [picked, setPicked] = useState<string[]>([interests[0]]);
   const [errors, setErrors] = useState<Errors>({});
   const [sent, setSent] = useState<string | null>(null);
-  const sec = useRef<HTMLElement>(null);
-  const reduce = useReducedMotion();
-  const { scrollYProgress: lp } = useScroll({ target: sec, offset: ["start end", "end start"] });
-  const liftY = useTransform(lp, [0.15, 0.95], reduce ? ["0vh", "0vh"] : ["28vh", "-95vh"]);
-  const liftHold = (): [number, number] => {
-    const el = sec.current;
-    if (!el) return [0, 0];
-    const top = el.getBoundingClientRect().top + window.scrollY;
-    return [top - window.innerHeight * 0.55, 1e9];
-  };
-  const smoke = useTransform(lp, [0.15, 0.95], [0, 1]);
 
   function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -56,14 +44,9 @@ export function Enquiry() {
   const toggle = (v: string) => setPicked((p) => (p.includes(v) ? p.filter((x) => x !== v) : [...p, v]));
 
   return (
-    <section className="enquiry" id="enquiry" ref={sec}>
+    <section className="enquiry" id="enquiry">
       <ParallaxImage className="enquiry__bg" src={img("1470252649378-9c29740c9fa8")} alt="" strength={14} />
       <div className="enquiry__scrim" aria-hidden />
-      <div className="liftoff" aria-hidden>
-        <RocketAnchor id="liftoff" className="liftoff__rocket" style={{ y: liftY }} hold={liftHold} flame>
-          <motion.span className="liftoff__smoke" style={{ scaleY: smoke }} />
-        </RocketAnchor>
-      </div>
       <span className="corner corner--tl" />
       <span className="corner corner--tr" />
       <span className="corner corner--bl" />
@@ -76,8 +59,7 @@ export function Enquiry() {
           </Reveal>
           <Reveal delay={0.1}>
             <p className="enquiry__sub">
-              Book a free spot in the morning session or ask us anything about copy-trading. We reply within one working
-              day.
+              We reply within one working day.
             </p>
           </Reveal>
 

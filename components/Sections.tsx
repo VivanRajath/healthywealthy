@@ -15,7 +15,7 @@ export function Footer() {
       <div className="footer__top">
         <div className="footer__brand">
           <Logo />
-          <p>Get 1% better every day, in your body and with your money. A community built on small, steady steps.</p>
+          <p>1% better every day, in body and money.</p>
           <ul className="footer__contact">
             <li>
               <Mail size={16} aria-hidden />

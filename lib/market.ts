@@ -1,6 +1,7 @@
 /*
-  Illustrative market data for the design preview.
-  Prices are simulated in the browser and are not live quotes.
+  Market data. Live quotes come from /api/quotes (worker/index.js) and replace these
+  starting values as soon as they load. The values below are only a fallback for local
+  preview, where there is no Worker.
 */
 
 export type Quote = {
@@ -9,6 +10,8 @@ export type Quote = {
   price: number;
   prevClose: number;
   kind: "index" | "stock" | "etf";
+  // Today's intraday closes, when live data has loaded.
+  spark?: number[];
 };
 
 export type Candle = { o: number; h: number; l: number; c: number; v: number };
@@ -24,34 +27,55 @@ export const timeframes: { id: Timeframe; vol: number; labels: [string, string, 
 ];
 
 export const initialIndices: Quote[] = [
-  { sym: "NIFTY 50", name: "Nifty 50", price: 24318.4, prevClose: 24168.55, kind: "index" },
-  { sym: "SENSEX", name: "BSE Sensex", price: 80112.95, prevClose: 79730.6, kind: "index" },
-  { sym: "BANK NIFTY", name: "Nifty Bank", price: 52140.25, prevClose: 51902.1, kind: "index" },
-  { sym: "NIFTY IT", name: "Nifty IT", price: 41882.6, prevClose: 42061.3, kind: "index" },
+  { sym: "NIFTY 50", name: "Nifty 50", price: 25186.4, prevClose: 25144.3, kind: "index" },
+  { sym: "SENSEX", name: "BSE Sensex", price: 81864.04, prevClose: 81592.45, kind: "index" },
+  { sym: "BANK NIFTY", name: "Nifty Bank", price: 61364.4, prevClose: 61034.1, kind: "index" },
+  { sym: "NIFTY IT", name: "Nifty IT", price: 31725.3, prevClose: 31931.15, kind: "index" },
 ];
 
 export const initialStocks: Quote[] = [
-  { sym: "RELIANCE", name: "Reliance Industries", price: 2948.6, prevClose: 2921.15, kind: "stock" },
-  { sym: "HDFCBANK", name: "HDFC Bank", price: 1684.2, prevClose: 1671.9, kind: "stock" },
-  { sym: "TCS", name: "Tata Consultancy Services", price: 4112.35, prevClose: 4140.8, kind: "stock" },
-  { sym: "INFY", name: "Infosys", price: 1872.9, prevClose: 1881.45, kind: "stock" },
-  { sym: "ICICIBANK", name: "ICICI Bank", price: 1268.45, prevClose: 1252.3, kind: "stock" },
-  { sym: "TATAMOTORS", name: "Tata Motors", price: 978.4, prevClose: 951.2, kind: "stock" },
-  { sym: "ITC", name: "ITC", price: 486.15, prevClose: 487.9, kind: "stock" },
-  { sym: "GOLDBEES", name: "Nippon India Gold ETF", price: 62.48, prevClose: 61.79, kind: "etf" },
+  { sym: "RELIANCE", name: "Reliance Industries", price: 1336.7, prevClose: 1339.7, kind: "stock" },
+  { sym: "HDFCBANK", name: "HDFC Bank", price: 811.95, prevClose: 804, kind: "stock" },
+  { sym: "TCS", name: "Tata Consultancy Services", price: 2390.1, prevClose: 2407.5, kind: "stock" },
+  { sym: "INFY", name: "Infosys", price: 1138.9, prevClose: 1141.5, kind: "stock" },
+  { sym: "ICICIBANK", name: "ICICI Bank", price: 1581.8, prevClose: 1583.6, kind: "stock" },
+  { sym: "TMPV", name: "Tata Motors Passenger Vehicles", price: 262.4, prevClose: 287.4, kind: "stock" },
+  { sym: "ITC", name: "ITC", price: 292.95, prevClose: 285, kind: "stock" },
+  { sym: "GOLDBEES", name: "Nippon India Gold ETF", price: 110.29, prevClose: 111.91, kind: "etf" },
 ];
 
-export const sectors = [
-  { name: "Banks", change: 1.24, span: "a" },
-  { name: "IT", change: -0.62, span: "b" },
-  { name: "Energy", change: 0.41, span: "c" },
-  { name: "Auto", change: 2.08, span: "d" },
-  { name: "FMCG", change: -0.31, span: "e" },
-  { name: "Pharma", change: 0.88, span: "f" },
-  { name: "Metals", change: -1.42, span: "g" },
-  { name: "Realty", change: 2.76, span: "h" },
-  { name: "Telecom", change: 0.18, span: "i" },
+/* Heat map tiles. `key` is the symbol the live feed uses for that sector index. */
+export type Sector = { name: string; key: string; span: string; change: number };
+
+export const initialSectors: Sector[] = [
+  { name: "Banks", key: "BANK NIFTY", span: "a", change: 0.54 },
+  { name: "IT", key: "NIFTY IT", span: "b", change: -0.64 },
+  { name: "Energy", key: "ENERGY", span: "c", change: -0.8 },
+  { name: "Auto", key: "AUTO", span: "d", change: -1.69 },
+  { name: "FMCG", key: "FMCG", span: "e", change: 1.16 },
+  { name: "Pharma", key: "PHARMA", span: "f", change: -1.79 },
+  { name: "Metals", key: "METAL", span: "g", change: -1.73 },
+  { name: "Realty", key: "REALTY", span: "h", change: -1.99 },
+  { name: "Media", key: "MEDIA", span: "i", change: -0.31 },
 ];
+
+/* Candles from the live feed. `t` is a Unix time in seconds. */
+export type LiveCandle = Candle & { t: number };
+
+const ist = (t: number, o: Intl.DateTimeFormatOptions) =>
+  new Intl.DateTimeFormat("en-IN", { timeZone: "Asia/Kolkata", ...o }).format(new Date(t * 1000));
+
+/* Three axis labels (first, middle, last) for a live series. */
+export function axisLabels(c: LiveCandle[], tf: Timeframe): [string, string, string] {
+  const o: Intl.DateTimeFormatOptions =
+    tf === "1D" ? { hour: "numeric", minute: "2-digit" }
+    : tf === "1W" ? { weekday: "short" }
+    : tf === "1M" ? { day: "numeric", month: "short" }
+    : tf === "1Y" ? { month: "short", year: "numeric" }
+    : { year: "numeric" };
+  const at = (i: number) => ist(c[i].t, o);
+  return [at(0), at(Math.floor(c.length / 2)), at(c.length - 1)];
+}
 
 /* Small deterministic PRNG so server and client render the same first frame. */
 export function rng(seed: number) {

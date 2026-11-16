@@ -5,7 +5,6 @@ import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion
 import { ArrowLeft, ArrowRight, ArrowUpRight, Clock, CalendarDays, MapPin, Gauge, Dumbbell, Users, Check, Info } from "lucide-react";
 import { classes, getClass } from "@/lib/classes";
 import { ParallaxImage, Reveal, SplitHeading, ease } from "./Motion";
-import { RocketAnchor } from "./StoryRocket";
 import { BookModal } from "./BookModal";
 import { useMode } from "./ModeProvider";
 
@@ -97,8 +96,6 @@ export function ClassPage({ slug }: { slug: string }) {
           </motion.div>
         </motion.div>
 
-        <RocketAnchor id="class-hero" className="ra-class-hero" rotate={22} flame />
-
         <dl className="ch__facts">
           {facts.map((f) => {
             const Icon = f.icon;
@@ -135,11 +132,9 @@ export function ClassPage({ slug }: { slug: string }) {
             <span className="marker" />
             <SplitHeading text={c.summary} className="cabout__lead" as="h2" />
           </Reveal>
-          {c.about.map((para, i) => (
-            <Reveal key={i} delay={0.1 + i * 0.08}>
-              <p className="cabout__p">{para}</p>
-            </Reveal>
-          ))}
+          <Reveal delay={0.1}>
+            <p className="cabout__p">{c.about[0]}</p>
+          </Reveal>
           <Reveal delay={0.25}>
             <BookButton onClick={book} variant="dark" label={`Book ${c.name}`} />
           </Reveal>
@@ -157,7 +152,6 @@ export function ClassPage({ slug }: { slug: string }) {
             <span className="marker" />
             <h2 className="h2">Inside a session.</h2>
           </Reveal>
-          <RocketAnchor id="class-flow" className="ra-class-flow" rotate={90} />
         </div>
         <ol className="cflow__list">
           {c.flow.map((f, i) => (
@@ -165,7 +159,6 @@ export function ClassPage({ slug }: { slug: string }) {
               <span className="cflow__num">{String(i + 1).padStart(2, "0")}</span>
               <span className="cflow__time">{f.minutes}</span>
               <h3>{f.title}</h3>
-              <p>{f.text}</p>
             </Reveal>
           ))}
         </ol>
@@ -222,7 +215,6 @@ export function ClassPage({ slug }: { slug: string }) {
         <Reveal className="cbook">
           <span className="corner corner--tl" />
           <span className="corner corner--br" />
-          <RocketAnchor id="class-book" className="ra-class-book" rotate={0} flame />
           <span className="cbook__eyebrow">Next session</span>
           <h3 className="cbook__title">{c.name}</h3>
           <p className="cbook__when">

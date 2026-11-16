@@ -967,3 +967,246 @@
   height: 100%;
   overflow: visible;
 }
+
+/* ---------- Launch: the rocket's last scene, opening Health and Wealth ---------- */
+.tabs {
+  padding-top: 0 !important;
+}
+
+.launch {
+  position: relative;
+  height: 320vh;
+}
+
+.launch__anchor {
+  position: absolute;
+  left: 0;
+  top: 74%;
+}
+
+.launch__stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--night);
+}
+
+.launch__reveal {
+  position: absolute;
+  inset: 0;
+}
+
+.launch__photo {
+  position: absolute;
+  inset: 0;
+}
+
+.launch__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  will-change: transform;
+}
+
+.launch__scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 72%, rgba(5, 10, 8, 0.55) 0%, rgba(5, 10, 8, 0) 100%),
+    linear-gradient(0deg, rgba(5, 10, 8, 0.8) 0%, rgba(5, 10, 8, 0) 60%);
+}
+
+.launch__copy {
+  position: absolute;
+  left: var(--gutter);
+  right: var(--gutter);
+  bottom: calc(56px * var(--k));
+  max-width: calc(860px * var(--k));
+  /* Centred: left and right are both set, so auto margins split the space. */
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: calc(14px * var(--k));
+  color: var(--white);
+  will-change: transform, opacity;
+}
+
+.launch__copy .marker {
+  margin-bottom: calc(6px * var(--k));
+}
+
+.launch__title {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: clamp(calc(44px * var(--k)), 6.4vw, calc(104px * var(--k)));
+  font-weight: 300;
+  line-height: 0.96;
+  letter-spacing: -0.03em;
+}
+
+.launch__lead {
+  margin: calc(16px * var(--k)) 0 calc(8px * var(--k));
+  font-family: var(--serif);
+  font-size: clamp(calc(20px * var(--k)), 2vw, calc(32px * var(--k)));
+  font-weight: 300;
+  line-height: 1.2;
+  max-width: 30ch;
+  margin-inline: auto;
+}
+
+.launch__text {
+  margin: 0 auto calc(12px * var(--k));
+  max-width: 52ch;
+  opacity: 0.85;
+}
+
+/* Behind the panel: the paper launch site and what is coming next. */
+.launch__stage {
+  --lw: clamp(calc(120px * var(--k)), 11vw, calc(190px * var(--k)));
+  background-color: var(--paper);
+}
+
+.launch__wait {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-image: radial-gradient(var(--dash) 1px, transparent 1.2px);
+  background-size: calc(26px * var(--k)) calc(26px * var(--k));
+  will-change: opacity;
+}
+
+.launch__next {
+  position: absolute;
+  left: 50%;
+  top: 19%;
+  translate: -50% 0;
+  font-size: calc(12px * var(--k));
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.launch__word {
+  position: absolute;
+  top: 34%;
+  font-family: var(--serif);
+  font-size: clamp(calc(52px * var(--k)), 9vw, calc(180px * var(--k)));
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.035em;
+  color: var(--ink);
+}
+
+.launch__word--l {
+  right: calc(50% + var(--lw) * 0.7);
+}
+
+.launch__word--r {
+  left: calc(50% + var(--lw) * 0.7);
+  color: var(--accent);
+}
+
+/* The panel the rocket hauls up, with the rocket's dock riding on top of it. */
+.haul {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  will-change: transform;
+}
+
+.launch__reveal {
+  overflow: hidden;
+  background: var(--night);
+}
+
+.tow {
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  width: calc(var(--lw) * 0.9);
+  height: calc(var(--lw) * 0.5);
+  translate: -50% 0;
+  z-index: 3;
+}
+
+.tow svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.tow line {
+  stroke: var(--ink);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.tow__tab {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  min-width: 100%;
+  translate: -50% 50%;
+  padding: calc(6px * var(--k)) calc(10px * var(--k));
+  background: var(--accent);
+  color: var(--white);
+  font-size: calc(10.5px * var(--k));
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-align: center;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* The rocket's base sits 72% down its drawing box, so the box overlaps the cables
+   by 0.3 of its width and the base lands exactly on top of them. */
+.ra-launch-wrap {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% - var(--lw) * 0.3);
+  width: var(--lw);
+  translate: -50% 0;
+  z-index: 4;
+}
+
+.ra-launch {
+  width: 100%;
+}
+
+/* Growth: a glowing marker at the tip of the line now the rocket has left. */
+.ghead {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: calc(16px * var(--k));
+  height: calc(16px * var(--k));
+  translate: -50% -50%;
+  background: var(--white);
+  box-shadow: 0 0 0 calc(6px * var(--k)) color-mix(in srgb, var(--white) 22%, transparent);
+  will-change: transform;
+}
+
+@media (max-width: 720px) {
+  .launch {
+    height: 280vh;
+  }
+
+  .launch__word {
+    font-size: clamp(36px, 11vw, 60px);
+  }
+
+  .launch__copy {
+    bottom: 32px;
+  }
+
+  .launch__stage {
+    --lw: 92px;
+  }
+}

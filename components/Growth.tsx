@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform, type MotionValue } from "framer-motion";
 import { Footprints, Sprout, Sun, Mountain, TreeDeciduous } from "lucide-react";
 import { Reveal } from "./Motion";
-import { RocketAnchor } from "./StoryRocket";
 
 /*
   The 1% idea drawn without numbers: a curve that improves a little each step
@@ -102,14 +101,6 @@ export function Growth() {
   const rTop = useTransform(head, (h) => (h.y / H) * size.current.h);
   const revealOut = useTransform(draw, (v) => `${(Math.min(1, Math.max(0, v)) - 1) * 100}%`);
   const revealIn = useTransform(draw, (v) => `${(1 - Math.min(1, Math.max(0, v))) * 100}%`);
-  const rRot = useTransform(head, (h) => h.ang);
-  // The rocket rides the curve for the whole time the scene is pinned.
-  const growthHold = (): [number, number] => {
-    const el = track.current;
-    if (!el) return [0, 0];
-    const top = el.getBoundingClientRect().top + window.scrollY;
-    return [top, top + el.offsetHeight - window.innerHeight];
-  };
   const cur = stages[stage];
   const CurIcon = cur.icon;
 
@@ -124,8 +115,7 @@ export function Growth() {
         </Reveal>
         <Reveal delay={0.1}>
           <p className="lead">
-            Getting a little better every day looks like nothing at first. Keep going and it pulls away from standing
-            still, and further still from slipping a little each day.
+            Tiny daily gains look like nothing, then they add up.
           </p>
         </Reveal>
       </div>
@@ -161,14 +151,7 @@ export function Growth() {
         {stages.map((s) => (
           <Stage key={s.title} s={s} progress={draw} />
         ))}
-        <RocketAnchor
-          id="growth"
-          className="grocket"
-          style={{ x: rLeft, y: rTop, rotate: rRot }}
-          rotate={() => rRot.get()}
-          hold={growthHold}
-          flame
-        />
+        <motion.span className="ghead" style={{ x: rLeft, y: rTop }} aria-hidden />
         </div>
 
         <div className="gchart__legend">
@@ -215,11 +198,11 @@ export function Growth() {
       <div className="growth__pair">
         <div>
           <h3>In your body</h3>
-          <p>One morning session at a time builds strength, mobility and calm that compound into how you feel every day.</p>
+          <p>Strength, mobility and calm, one session at a time.</p>
         </div>
         <div>
-          <h3>In your habits with money</h3>
-          <p>Consistency and patience matter more than any single day. Markets move both ways, so we look at the long run.</p>
+          <h3>In your money</h3>
+          <p>Patience over any single day. Markets move both ways.</p>
         </div>
       </div>
     </section>

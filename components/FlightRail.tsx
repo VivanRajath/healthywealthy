@@ -30,7 +30,7 @@ export function FlightRail() {
       setStops(
         chapters.map((c) => {
           const el = document.getElementById(c.id);
-          return el && max > 0 ? Math.min(1, el.offsetTop / max) : 0;
+          return el && max > 0 ? Math.min(1, (el.getBoundingClientRect().top + window.scrollY) / max) : 0;
         })
       );
     };

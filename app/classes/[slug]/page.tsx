@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Nav } from "@/components/Nav";
-import { StoryRocket } from "@/components/StoryRocket";
 import { ClassPage } from "@/components/ClassPage";
 import { Footer } from "@/components/Sections";
 import { classes, getClass } from "@/lib/classes";
@@ -27,8 +26,7 @@ export default async function ClassRoute({ params }: Props) {
   if (!getClass(slug)) notFound();
   return (
     <>
-      <Nav />
-      <StoryRocket />
+      <Nav ticker={false} />
       <main>
         <ClassPage slug={slug} />
       </main>

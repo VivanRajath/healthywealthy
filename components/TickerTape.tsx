@@ -33,14 +33,14 @@ export function Change({ q, showIcon = true }: { q: Quote; showIcon?: boolean })
 }
 
 export function TickerTape() {
-  const { indices, stocks } = useMarket();
+  const { indices, stocks, live, open } = useMarket();
   const items = [...indices, ...stocks];
 
   return (
-    <div className="tape" aria-label="Illustrative market prices">
+    <div className={`tape${live && !open ? " is-closed" : ""}`} aria-label="Market prices">
       <span className="tape__status">
         <span className="pulse" aria-hidden />
-        Markets
+        {live ? (open ? "Live" : "Closed") : "Markets"}
       </span>
       <div className="tape__viewport">
         <div className="tape__track">

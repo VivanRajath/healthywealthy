@@ -874,7 +874,7 @@ button {
 .switch {
   position: relative;
   display: inline-flex;
-  gap: 2px;
+  gap: calc(6px * var(--k));
 }
 
 .switch__btn {
@@ -885,12 +885,13 @@ button {
   height: calc(46px * var(--k));
   padding: 0 calc(22px * var(--k));
   font-size: calc(13px * var(--k));
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.07em;
   text-transform: uppercase;
-  background: rgba(255, 255, 255, 0.6);
   color: var(--ink-2);
-  transition: color 0.3s;
+  cursor: pointer;
+  overflow: hidden;
+  transition: color 0.3s, transform 0.25s, background-color 0.25s;
 }
 
 .switch__btn > *:not(.switch__pill) {
@@ -902,9 +903,74 @@ button {
   color: var(--accent-ink);
 }
 
-.switch__btn:not(.is-active):hover {
-  color: var(--ink);
+/* The other side is drawn as a solid button in its own colour. */
+.switch__btn.is-other {
+  padding-right: 0;
   background: var(--white);
+  color: var(--ink);
+  box-shadow: inset 0 calc(-3px * var(--k)) 0 var(--opt);
+}
+
+.switch__btn.is-other .switch__icon {
+  color: var(--opt);
+}
+
+.switch__go {
+  align-self: stretch;
+  display: grid;
+  place-items: center;
+  width: calc(46px * var(--k));
+  margin-left: calc(6px * var(--k));
+  background: var(--opt);
+  color: #fff;
+}
+
+.switch__go svg {
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.switch__btn.is-other:hover {
+  transform: translateY(calc(-3px * var(--k)));
+}
+
+.switch__btn.is-other:hover .switch__go svg {
+  transform: translate(calc(2px * var(--k)), calc(-2px * var(--k))) rotate(45deg);
+}
+
+.switch__btn:focus-visible {
+  outline: 2px solid var(--opt);
+  outline-offset: 3px;
+}
+
+/* A light sweep across the other side until the switch has been used. Transform only. */
+.switch__btn.is-other::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, 0.75) 50%, transparent 70%);
+  transform: translateX(-120%);
+}
+
+.switch:not(.is-used) .switch__btn.is-other::after {
+  animation: switch-sweep 3.4s cubic-bezier(0.45, 0, 0.2, 1) 1.2s infinite;
+}
+
+@keyframes switch-sweep {
+  0%,
+  55% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(120%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .switch:not(.is-used) .switch__btn.is-other::after {
+    animation: none;
+  }
 }
 
 .switch__pill {
@@ -918,6 +984,15 @@ button {
   height: calc(56px * var(--k));
   padding: 0 calc(32px * var(--k));
   font-size: calc(14px * var(--k));
+}
+
+.switch--lg .switch__btn.is-other {
+  padding-right: 0;
+}
+
+.switch--lg .switch__go {
+  width: calc(56px * var(--k));
+  margin-left: calc(10px * var(--k));
 }
 
 .banner {
@@ -1743,6 +1818,14 @@ button {
   .switch--lg .switch__btn {
     height: calc(48px * var(--k));
     padding: 0 calc(22px * var(--k));
+  }
+
+  .switch--lg .switch__btn.is-other {
+    padding-right: 0;
+  }
+
+  .switch--lg .switch__go {
+    width: calc(48px * var(--k));
   }
 
   .chart {

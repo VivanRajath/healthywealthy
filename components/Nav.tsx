@@ -20,7 +20,8 @@ const links: { href: string; label: string; mode?: Mode }[] = [
   { href: "/#faq", label: "FAQ" },
 ];
 
-export function Nav() {
+// Class pages are about health only, so they leave the market ticker out.
+export function Nav({ ticker = true }: { ticker?: boolean }) {
   const { setMode } = useMode();
   const [open, setOpen] = useState(false);
   const [onDark, setOnDark] = useState(true);
@@ -73,7 +74,7 @@ export function Nav() {
           {open ? <X size={20} /> : <Menu size={20} />}
         </button>
       </div>
-      <TickerTape />
+      {ticker && <TickerTape />}
 
       <div className={`drawer${open ? " is-open" : ""}`} aria-hidden={!open}>
         {links.map((l) => (

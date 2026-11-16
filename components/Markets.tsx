@@ -5,16 +5,17 @@ import { Star, Info, ShieldCheck, ChartCandlestick, Link2, Wallet, KeyRound, Per
 import { useMarket } from "./MarketProvider";
 import { Tick, Change } from "./TickerTape";
 import { Reveal } from "./Motion";
-import { RocketAnchor } from "./StoryRocket";
 import { riskLine } from "@/lib/content";
-import { fmt, makeCandles, timeframes, sectors, initialStocks, initialIndices, type Timeframe, type Quote } from "@/lib/market";
+import { fmt, makeCandles, axisLabels, timeframes, initialStocks, initialIndices, type Timeframe, type Quote, type Candle, type LiveCandle } from "@/lib/market";
 
 /* History is anchored to the opening quote so live ticks continue it smoothly. */
 const anchor = (q: Quote) => [...initialStocks, ...initialIndices].find((x) => x.sym === q.sym)?.price ?? q.price;
 
 /* ---------- Mini sparkline ---------- */
 function Spark({ q, w = 96, h = 30, stretch = false }: { q: Quote; w?: number; h?: number; stretch?: boolean }) {
-  const pts = useMemo(() => makeCandles(q.sym, "1D", anchor(q), 32).map((c) => c.c), [q.sym]); // eslint-disable-line react-hooks/exhaustive-deps
+  // Today's real intraday line when live data has loaded, a generated one otherwise.
+  const sim = useMemo(() => makeCandles(q.sym, "1D", anchor(q), 32).map((c) => c.c), [q.sym]); // eslint-disable-line react-hooks/exhaustive-deps
+  const pts = q.spark && q.spark.length > 2 ? q.spark : sim;
   const all = [...pts, q.price];
   const min = Math.min(...all);
   const max = Math.max(...all);
@@ -52,10 +53,49 @@ function useNarrow() {
   return narrow;
 }
 
+/* Real candles from /api/chart, kept per symbol and timeframe. Null until loaded or if unavailable. */
+const chartCache = new Map<string, LiveCandle[]>();
+
+function useLiveCandles(sym: string, tf: Timeframe) {
+  const key = `${sym}|${tf}`;
+  const [data, setData] = useState<{ key: string; c: LiveCandle[] } | null>(null);
+  useEffect(() => {
+    let alive = true;
+    const load = () => {
+      fetch(`/api/chart?sym=${encodeURIComponent(sym)}&tf=${tf}`)
+        .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
+        .then((j: { candles: LiveCandle[] }) => {
+          if (!alive || !j.candles || j.candles.length < 2) return;
+          chartCache.set(key, j.candles);
+          setData({ key, c: j.candles });
+        })
+        .catch(() => {});
+    };
+    const hit = chartCache.get(key);
+    if (hit) setData({ key, c: hit });
+    load();
+    // Keep the intraday chart fresh while it is on screen.
+    const id = tf === "1D" ? window.setInterval(() => !document.hidden && load(), 60000) : 0;
+    return () => {
+      alive = false;
+      window.clearInterval(id);
+    };
+  }, [key, sym, tf]);
+  return data && data.key === key ? data.c : null;
+}
+
 function CandleChart({ q, tf }: { q: Quote; tf: Timeframe }) {
   // A phone gets fewer, wider candles so each one is still readable.
   const narrow = useNarrow();
-  const base = useMemo(() => makeCandles(q.sym, tf, anchor(q), narrow ? 34 : 64), [q.sym, tf, narrow]); // eslint-disable-line react-hooks/exhaustive-deps
+  const live = useLiveCandles(q.sym, tf);
+  const base = useMemo<Candle[]>(() => {
+    if (!live) return makeCandles(q.sym, tf, anchor(q), narrow ? 34 : 64);
+    const n = narrow ? 34 : 64;
+    // Show the most recent candles, and scale volume to the busiest one (indices report none).
+    const c = live.slice(-n);
+    const top = Math.max(...c.map((x) => x.v));
+    return c.map((x) => ({ ...x, v: top ? 0.12 + (x.v / top) * 0.88 : 0 }));
+  }, [live, q.sym, tf, narrow]); // eslint-disable-line react-hooks/exhaustive-deps
   // Last candle follows the live price.
   const candles = useMemo(() => {
     const out = base.slice();
@@ -87,7 +127,7 @@ function CandleChart({ q, tf }: { q: Quote; tf: Timeframe }) {
   const idx = hover ?? candles.length - 1;
   const sel = candles[idx];
   const levels = [0.15, 0.4, 0.65, 0.9].map((t) => top - (top - bot) * t);
-  const labels = timeframes.find((t) => t.id === tf)!.labels;
+  const labels = live ? axisLabels(live.slice(-(narrow ? 34 : 64)), tf) : timeframes.find((t) => t.id === tf)!.labels;
 
   return (
     <div className="cchart">
@@ -141,7 +181,6 @@ function CandleChart({ q, tf }: { q: Quote; tf: Timeframe }) {
           )}
         </svg>
 
-        <RocketAnchor id="markets" className="ra-markets" rotate={40} />
         <div className="cchart__axis-y" aria-hidden>
           {levels.map((l) => (
             <span key={l} style={{ top: `${(y(l) / (PH + VH)) * 100}%` }}>
@@ -246,7 +285,7 @@ function CopyPanel() {
 
 /* ---------- Section ---------- */
 export function Markets() {
-  const { indices, stocks } = useMarket();
+  const { indices, stocks, sectors, live, open } = useMarket();
   const [sym, setSym] = useState("RELIANCE");
   const [tf, setTf] = useState<Timeframe>("1D");
   const [watch, setWatch] = useState<string[]>(["RELIANCE", "GOLDBEES"]);
@@ -260,13 +299,10 @@ export function Markets() {
           <h2 className="h2">Watch the master account, trade by trade.</h2>
         </Reveal>
         <Reveal delay={0.1} className="markets__intro">
-          <p className="lead">
-            Link your trading account and every trade in the master account is mirrored in yours. Follow the markets
-            here as they move, with your money always in your own name.
-          </p>
-          <span className="status">
+          <p className="lead">Live NSE and BSE prices, right here.</p>
+          <span className={`status${live && !open ? " is-closed" : ""}`}>
             <span className="pulse" aria-hidden />
-            NSE and BSE open, closes 3:30 pm
+            {!live ? "Connecting to NSE and BSE" : open ? "Market open, closes 3:30 pm" : "Market closed, last prices"}
           </span>
         </Reveal>
       </div>
@@ -368,7 +404,7 @@ export function Markets() {
                 <div
                   key={s.name}
                   className={`heat__cell heat__cell--${s.span} ${up ? "is-up" : "is-down"}`}
-                  style={{ "--k": `${Math.round(25 + strength * 60)}%` } as React.CSSProperties}
+                  style={{ "--heat": `${Math.round(25 + strength * 60)}%` } as React.CSSProperties}
                 >
                   <span>{s.name}</span>
                   <strong>
@@ -385,11 +421,11 @@ export function Markets() {
       <div className="markets__notes">
         <p>
           <ShieldCheck size={16} aria-hidden />
-          Your funds stay in your own trading account. Change your password at any time to stop copying.
+          Your funds stay in your own trading account.
         </p>
         <p>
           <Info size={16} aria-hidden />
-          Design preview with illustrative prices, not live market data. {riskLine}
+          {live ? "Live prices from NSE and BSE, may be delayed." : "Sample prices shown while live data loads."} Master account trades shown are examples. {riskLine}
         </p>
       </div>
     </section>

@@ -5,7 +5,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Bell, ChevronRight } from "lucide-react";
 import { useMode } from "./ModeProvider";
 import { content } from "@/lib/content";
-import { RocketAnchor } from "./StoryRocket";
 
 function spark(points: number[], w = 260, h = 110) {
   const max = Math.max(...points);
@@ -129,7 +128,6 @@ export function Pillars() {
           </AnimatePresence>
         </div>
         <div className="pillars__halo" aria-hidden />
-        <RocketAnchor id="pillars" className="ra-pillars" rotate={24} />
       </div>
     </section>
   );

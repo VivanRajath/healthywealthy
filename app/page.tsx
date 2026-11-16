@@ -2,7 +2,6 @@ import { Nav } from "@/components/Nav";
 import { Hero } from "@/components/Hero";
 import { About } from "@/components/About";
 import { RocketServices } from "@/components/RocketServices";
-import { FlightRail } from "@/components/FlightRail";
 import { StoryRocket } from "@/components/StoryRocket";
 import { Tabs } from "@/components/Tabs";
 import { Challenge } from "@/components/Challenge";
@@ -17,7 +16,6 @@ export default function Home() {
   return (
     <>
       <Nav />
-      <FlightRail />
       <StoryRocket />
       <main>
         <Hero />

@@ -5,7 +5,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import { Reveal, ease, ParallaxImage } from "./Motion";
 import { img } from "@/lib/content";
-import { RocketAnchor } from "./StoryRocket";
 
 /*
   Placeholder testimonials for the design. Replace with real member quotes,
@@ -13,28 +12,28 @@ import { RocketAnchor } from "./StoryRocket";
 */
 const quotes = [
   {
-    text: "I have tried every fitness app there is. What finally worked was a real person on Google Meet at 6:30 every morning, and forty other people showing up with me.",
+    text: "What finally worked was a real coach at 6:30 every morning.",
     name: "Priya S.",
     meta: "Member for 8 months, Pune",
     tag: "Health",
     image: img("1506126613408-eca07ce68773", 900),
   },
   {
-    text: "The 30 day challenge got me. I did not want to break the streak, and by day twenty I did not need the leaderboard to get out of bed.",
+    text: "By day twenty I did not need the leaderboard to get out of bed.",
     name: "Vikram T.",
     meta: "Member for 4 months, Bengaluru",
     tag: "Challenge",
     image: img("1571019613454-1cb2f99b2d8b", 900),
   },
   {
-    text: "What I liked was that my money stayed in my own account. I can see every trade, and I know I can stop it by changing my password.",
+    text: "My money stays in my own account, and I can see every trade.",
     name: "Nisha K.",
     meta: "Member for 6 months, Mumbai",
     tag: "Wealth",
     image: img("1559526324-4b87b5e36e44", 900),
   },
   {
-    text: "My parents and I join the same session from two different cities. It has become the one thing we do together every day.",
+    text: "My parents and I join from two cities. It is our daily thing.",
     name: "Aditya and family",
     meta: "Members for 1 year, Delhi and Lucknow",
     tag: "Community",
@@ -83,7 +82,6 @@ export function Testimonials() {
 
         <div className="testi__quote" aria-live="polite">
           <Quote className="testi__mark" size={40} strokeWidth={1.2} aria-hidden />
-          <RocketAnchor id="stories" className="ra-stories" rotate={-16} />
           <AnimatePresence mode="wait" initial={false}>
             <motion.figure
               key={i}

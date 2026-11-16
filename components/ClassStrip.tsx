@@ -14,7 +14,7 @@ export function ClassStrip() {
           <h2 className="h2">Pick your class.</h2>
         </Reveal>
         <Reveal delay={0.1}>
-          <p className="lead">Six live classes every week, all free for members. Open one to see what a session looks like and book a spot.</p>
+          <p className="lead">Six live classes, free for members.</p>
         </Reveal>
       </div>
       <div className="cstrip__grid">

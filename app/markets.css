@@ -46,6 +46,13 @@
   box-shadow: 0 0 0 calc(3px * var(--k)) color-mix(in srgb, var(--up) 30%, transparent);
 }
 
+/* Grey marker when the market is shut. */
+.status.is-closed .pulse,
+.tape.is-closed .pulse {
+  background: var(--dash);
+  box-shadow: none;
+}
+
 /* ---------- Ticker tape ---------- */
 .tape {
   display: flex;
@@ -781,11 +788,11 @@
 }
 
 .heat__cell.is-up {
-  background: color-mix(in srgb, #1f9d5a var(--k), var(--night));
+  background: color-mix(in srgb, #1f9d5a var(--heat), var(--night));
 }
 
 .heat__cell.is-down {
-  background: color-mix(in srgb, #d6493f var(--k), var(--night));
+  background: color-mix(in srgb, #d6493f var(--heat), var(--night));
 }
 
 .heat__cell--a { grid-area: a; }

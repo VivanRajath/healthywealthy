@@ -7,6 +7,7 @@ import "./markets.css";
 import "./sections.css";
 import "./rocket.css";
 import "./classes.css";
+import "./about.css";
 
 const display = Fraunces({
   subsets: ["latin"],

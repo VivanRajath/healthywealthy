@@ -179,8 +179,7 @@ export function Hero() {
         <motion.div className="hero__bottom" style={{ opacity: introOpacity }}>
           <span aria-hidden />
           <p className="hero__desc">
-            1% Daily is a community for getting a little healthier and a little wealthier, one small step every
-            single day.
+            A little healthier and wealthier, every day.
           </p>
           <motion.a
             href="#challenge"
@@ -194,7 +193,7 @@ export function Hero() {
               <span>Starts 1 Dec</span>
             </span>
             <span className="news__body">
-              <span>Core and posture month. Book your free spot in the morning session.</span>
+              <span>Core and posture month.</span>
               <span className="news__arrow">
                 <ArrowRight size={18} strokeWidth={1.8} />
               </span>
@@ -207,10 +206,7 @@ export function Hero() {
           <div className="hero__after-left">
             <span className="marker" />
             <h2 className="hero__after-title">Small gains, added daily</h2>
-            <p className="hero__after-text">
-              A free live session for your body every morning and copy-trading for your money, both built on the same
-              idea: tiny, steady steps.
-            </p>
+            <p className="hero__after-text">Free live sessions for your body. Copy-trading for your money.</p>
           </div>
           <ul className="hero__tiles">
             {tiles.map((t) => {
