@@ -140,11 +140,11 @@
   display: grid;
   place-items: center;
   border: 1px dashed var(--dash);
-  /* A deeper blueprint tone so the white rocket stands out against it. */
+  /* A neutral dark grey, the same on Health and Wealth, so the white rocket stands out. */
   background:
-    linear-gradient(rgba(15, 28, 22, 0.12) 1px, transparent 1px) 0 0 / 100% calc(32px * var(--k)),
-    linear-gradient(90deg, rgba(15, 28, 22, 0.12) 1px, transparent 1px) 0 0 / calc(32px * var(--k)) 100%,
-    color-mix(in srgb, var(--accent) 34%, #c9d3cd);
+    linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px) 0 0 / 100% calc(32px * var(--k)),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px) 0 0 / calc(32px * var(--k)) 100%,
+    #6f7773;
 }
 
 .rs__rocket {
