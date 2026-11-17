@@ -140,10 +140,11 @@
   display: grid;
   place-items: center;
   border: 1px dashed var(--dash);
+  /* A deeper blueprint tone so the white rocket stands out against it. */
   background:
-    linear-gradient(var(--line) 1px, transparent 1px) 0 0 / 100% calc(32px * var(--k)),
-    linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0 / calc(32px * var(--k)) 100%,
-    color-mix(in srgb, var(--accent-soft) 45%, var(--paper));
+    linear-gradient(rgba(15, 28, 22, 0.12) 1px, transparent 1px) 0 0 / 100% calc(32px * var(--k)),
+    linear-gradient(90deg, rgba(15, 28, 22, 0.12) 1px, transparent 1px) 0 0 / calc(32px * var(--k)) 100%,
+    color-mix(in srgb, var(--accent) 34%, #c9d3cd);
 }
 
 .rs__rocket {

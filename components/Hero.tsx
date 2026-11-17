@@ -127,7 +127,12 @@ export function Hero() {
   const scrim = useTransform(p, [0.3, 0.62], [0, 1]);
   const after = useTransform(p, [0.58, 0.74], [0, 1]);
   const afterY = useTransform(p, [0.58, 0.74], reduce ? [0, 0] : [40, 0]);
-  const chart = useTransform(p, [0.64, 0.9], [0, 1]);
+  /*
+    The card's line draws from left to right by uncovering it with a clip. (Drawing it with
+    a dash pattern broke the line into pieces on very large screens, because the line keeps
+    a fixed thickness while the chart stretches.)
+  */
+  const chartClip = useTransform(p, (v: number) => `inset(0 ${((1 - Math.min(1, Math.max(0, (v - 0.64) / 0.26))) * 100).toFixed(2)}% 0 0)`);
 
   return (
     <section className="hero" ref={ref} id="top" data-nav-dark="0.22">
@@ -188,11 +193,9 @@ export function Hero() {
             {Array.from({ length: 16 }).map((_, i) => (
               <line key={i} x1={i * 20} x2={i * 20} y1="0" y2="160" className="hero__chart-grid" />
             ))}
-            <motion.path
-              d="M0 150 C 40 150, 50 140, 80 128 S 150 96, 190 74 S 260 30, 300 14"
-              className="hero__chart-line"
-              style={{ pathLength: chart }}
-            />
+            <motion.g style={{ clipPath: chartClip }}>
+              <path d="M0 150 C 40 150, 50 140, 80 128 S 150 96, 190 74 S 260 30, 300 14" className="hero__chart-line" />
+            </motion.g>
           </svg>
           <SButton href="#challenge" variant="glass" className="hero__card-btn">
             Join the challenge
