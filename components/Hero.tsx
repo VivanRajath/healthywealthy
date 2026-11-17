@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, ArrowUpRight, Video, ChartCandlestick, CalendarCheck } from "lucide-react";
 import { ease } from "./Motion";
 import { SButton } from "./SButton";
@@ -78,32 +78,35 @@ export function Hero() {
   const { scrollYProgress: p } = useScroll({ target: ref, offset: ["start start", "end end"] });
 
   const end = mobile ? MOBILE : DESKTOP;
-  const endRef = useRef(end);
-  endRef.current = end;
   /*
-    The photo shrinks into the card by scaling its frame and counter-scaling the content
-    inside it. The GPU only moves and crops layers, so nothing is repainted while scrolling.
-    (A clip-path here repainted the full-screen photo on every frame.)
+    The photo is framed down to the card by four paper panels that slide in from the
+    edges. Only the panels move; the photo is never scaled, so the browser never has to
+    redraw it while scrolling. (Scaling the photo layer made it re-render at every size,
+    which caught and flickered; a clip-path repainted the full-screen photo every frame.)
   */
-  const crop = (v: number) => {
+  // How far the panels have closed in, 0 to 1, eased the same way the card appears.
+  const closed = useTransform(p, (v) => {
     const t = Math.min(1, Math.max(0, (v - 0.22) / 0.4));
-    const e = 1 - Math.pow(1 - t, 3);
-    const [top, right, bottom, left] = endRef.current.map((n) => (n * e) / 100);
-    return { top, left, sx: 1 - left - right, sy: 1 - top - bottom };
-  };
-  const frameT = useTransform(p, (v) => {
-    const c = crop(v);
-    return `translate(${c.left * 100}%, ${c.top * 100}%) scale(${c.sx}, ${c.sy})`;
+    return 1 - Math.pow(1 - t, 3);
   });
-  const innerT = useTransform(p, (v) => {
-    const c = crop(v);
-    return `scale(${1 / c.sx}, ${1 / c.sy}) translate(${-c.left * 100}%, ${-c.top * 100}%)`;
-  });
+  const veilTop = useTransform(closed, (e) => `translateY(${(-(1 - e) * 100).toFixed(2)}%)`);
+  const veilBottom = useTransform(closed, (e) => `translateY(${((1 - e) * 100).toFixed(2)}%)`);
+  const veilLeft = useTransform(closed, (e) => `translateX(${(-(1 - e) * 100).toFixed(2)}%)`);
+  const veilRight = useTransform(closed, (e) => `translateX(${((1 - e) * 100).toFixed(2)}%)`);
   const imgY = useTransform(p, [0, 1], reduce ? ["0%", "0%"] : ["0%", "10%"]);
-  const imgScale = useTransform(p, [0, 0.62], reduce ? [1, 1] : [1.04, 1.18]);
 
   const introOpacity = useTransform(p, [0.05, 0.24], [1, 0]);
   const introY = useTransform(p, [0, 0.24], reduce ? [0, 0] : [0, -90]);
+
+  /*
+    The buttons stay in full view while the rocket rides the graph to the right. When it
+    arrives (the ride ends at 0.17) they light up, and the next stretch of scroll carries
+    them down and out as the photo frames down to the card.
+  */
+  const ctaOpacity = useTransform(p, [0.24, 0.34], [1, 0]);
+  const ctaY = useTransform(p, [0.24, 0.34], reduce ? [0, 0] : [0, 140]);
+  const [lit, setLit] = useState(false);
+  useMotionValueEvent(p, "change", (v) => setLit(v >= 0.16 && v < 0.3));
   const ride = useTransform(p, [0, 0.17], [0, 1]);
   const exit = useTransform(p, [0, 1], [0, 0]);
 
@@ -136,9 +139,9 @@ export function Hero() {
           <span className="blueprint__v" style={{ right: `${end[1]}%` }} />
         </div>
 
-        <motion.div className="hero__frame" style={{ transform: frameT }}>
-          <motion.div className="hero__frame-in" style={{ transform: innerT }}>
-          <motion.div className="hero__media" style={{ y: imgY, scale: imgScale }}>
+        <motion.div className="hero__frame">
+          <motion.div className="hero__frame-in">
+          <motion.div className="hero__media" style={{ y: imgY }}>
             <motion.img
               src={img("1506905925346-21bda4d32df4")}
               srcSet={srcset(img("1506905925346-21bda4d32df4"))}
@@ -157,6 +160,14 @@ export function Hero() {
           </motion.div>
           </motion.div>
         </motion.div>
+
+        {/* Paper panels that frame the photo down to the card. */}
+        <div className="hero__veil" aria-hidden>
+          <motion.span className="hero__veil-t" style={{ height: `${end[0]}%`, transform: veilTop }} />
+          <motion.span className="hero__veil-b" style={{ height: `${end[2]}%`, transform: veilBottom }} />
+          <motion.span className="hero__veil-l" style={{ width: `${end[3]}%`, transform: veilLeft }} />
+          <motion.span className="hero__veil-r" style={{ width: `${end[1]}%`, transform: veilRight }} />
+        </div>
 
         {/* Data card that the photo becomes */}
         <motion.div
@@ -189,8 +200,8 @@ export function Hero() {
         </motion.div>
 
         {/* Intro copy over the full photo */}
-        <motion.div className="hero__intro" style={{ opacity: introOpacity, y: introY }}>
-          <h1 className="hero__title">
+        <div className="hero__intro">
+          <motion.h1 className="hero__title" style={{ opacity: introOpacity, y: introY }}>
             {["1% better,", "every day."].map((l, i) => (
               <span className="hero__mask" key={l}>
                 <motion.span
@@ -203,7 +214,8 @@ export function Hero() {
                 </motion.span>
               </span>
             ))}
-          </h1>
+          </motion.h1>
+          <motion.div className={`hero__cta-wrap${lit ? " is-lit" : ""}`} style={{ opacity: ctaOpacity, y: ctaY }}>
           <motion.div
             className="hero__ctas"
             initial={reduce ? false : { opacity: 0, y: 16 }}
@@ -217,7 +229,8 @@ export function Hero() {
               Book now
             </SButton>
           </motion.div>
-        </motion.div>
+          </motion.div>
+        </div>
 
         <motion.div className="hero__bottom" style={{ opacity: introOpacity }}>
           <span aria-hidden />

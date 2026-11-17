@@ -701,6 +701,67 @@ button {
   justify-content: center;
 }
 
+/* The buttons light up when the rocket arrives at the right of the graph. */
+.hero__cta-wrap {
+  will-change: opacity, transform;
+}
+
+.hero__cta-wrap .sbtn {
+  transition: transform 0.4s var(--ease), box-shadow 0.5s var(--ease);
+}
+
+.hero__cta-wrap.is-lit .sbtn {
+  transform: translateY(calc(-3px * var(--k)));
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.85),
+    0 calc(14px * var(--k)) calc(40px * var(--k)) color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
+.hero__cta-wrap .sbtn--glass .sbtn__label {
+  transition: background-color 0.5s, color 0.5s;
+}
+
+.hero__cta-wrap.is-lit .sbtn--glass .sbtn__label {
+  background: var(--white);
+  color: var(--ink);
+}
+
+.hero__cta-wrap.is-lit .sbtn__arrow {
+  background: var(--accent-2);
+}
+
+/* A single ring that spreads out once as they light up; not a repeating animation. */
+.hero__cta-wrap.is-lit .sbtn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  pointer-events: none;
+  animation: cta-ring 0.9s var(--ease) 1 forwards;
+}
+
+.hero__cta-wrap .sbtn {
+  position: relative;
+}
+
+@keyframes cta-ring {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.12, 1.4);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__cta-wrap.is-lit .sbtn::after {
+    animation: none;
+    opacity: 0;
+  }
+}
+
 /* Phones: the buttons go back under the headline. */
 @media (max-width: 720px) {
   .hero__intro {

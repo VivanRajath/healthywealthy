@@ -489,16 +489,71 @@
 }
 
 /* ---------- Performance: GPU-only scroll effects ---------- */
-.hero__frame {
-  transform-origin: 0 0;
-  will-change: transform;
-}
-
 .hero__frame-in {
   position: absolute;
   inset: 0;
-  transform-origin: 0 0;
+}
+
+/* The photo itself only moves up and down; it keeps one GPU layer and is never redrawn. */
+.hero__media {
   will-change: transform;
+}
+
+/* Four panels in the hero's own paper colour, sliding in from the edges to frame the
+   photo down to the card. Solid colour, transform only: nothing is redrawn. */
+.hero__veil {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.hero__veil span {
+  position: absolute;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 22%, var(--paper)) 0%, var(--paper) 70%);
+  background-size: 100% 100svh;
+  will-change: transform;
+}
+
+.hero__veil-t {
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.hero__veil-b {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-position: 0 100% !important;
+}
+
+.hero__veil-l {
+  top: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.hero__veil-r {
+  top: 0;
+  bottom: 0;
+  right: 0;
+}
+
+/* The card, words and tiles sit above the panels. */
+.hero__card,
+.hero__intro,
+.hero__bottom,
+.hero__after {
+  z-index: 3;
+}
+
+/* The blueprint lines sit on top of the panels. */
+.blueprint {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
 }
 
 /* Layers that fade or move during the hero get their own GPU layer, so fading never repaints them. */
