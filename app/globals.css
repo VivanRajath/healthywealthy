@@ -1242,37 +1242,6 @@ button {
   outline-offset: 3px;
 }
 
-/* A light sweep across the other side until the switch has been used. Transform only. */
-.switch__btn.is-other::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  background: linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, 0.75) 50%, transparent 70%);
-  transform: translateX(-120%);
-}
-
-.switch:not(.is-used) .switch__btn.is-other::after {
-  animation: switch-sweep 3.4s cubic-bezier(0.45, 0, 0.2, 1) 1.2s infinite;
-}
-
-@keyframes switch-sweep {
-  0%,
-  55% {
-    transform: translateX(-120%);
-  }
-  100% {
-    transform: translateX(120%);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .switch:not(.is-used) .switch__btn.is-other::after {
-    animation: none;
-  }
-}
-
 .switch__pill {
   position: absolute;
   inset: 0;
@@ -2314,8 +2283,9 @@ main > .faq {
   font-weight: 300;
   line-height: 0.8;
   letter-spacing: -0.05em;
-  color: transparent;
-  -webkit-text-stroke: 1px color-mix(in srgb, var(--accent) 28%, transparent);
+  /* A faint solid fill; an outline (text-stroke) was slow to draw the first time. */
+  color: var(--accent);
+  opacity: 0.06;
   pointer-events: none;
   user-select: none;
   white-space: nowrap;

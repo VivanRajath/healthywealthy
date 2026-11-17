@@ -51,7 +51,7 @@ function Wipe({ src, alt, label, tone, delay, className }: { src: string; alt: s
   const reduce = useReducedMotion();
   return (
     <figure className={`aframe aframe--${tone} ${className}`}>
-      <ParallaxImage src={src} alt={alt} strength={10} className="aframe__img" />
+      <ParallaxImage src={src} alt={alt} strength={10} className="aframe__img" sizes="(max-width: 900px) 50vw, 30vw" />
       <motion.span
         className="aframe__cover"
         aria-hidden

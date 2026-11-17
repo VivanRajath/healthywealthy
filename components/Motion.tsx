@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import { srcset } from "@/lib/content";
 import { motion, useInView, useReducedMotion, useScroll, useTransform, type MotionStyle, type MotionValue } from "framer-motion";
 
 export const ease = [0.22, 1, 0.36, 1] as const;
@@ -12,12 +13,15 @@ export function ParallaxImage({
   strength = 12,
   className = "",
   priority = false,
+  sizes = "100vw",
 }: {
   src: string;
   alt: string;
   strength?: number;
   className?: string;
   priority?: boolean;
+  /* How wide the photo shows, so the right file size is picked. */
+  sizes?: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
@@ -28,8 +32,11 @@ export function ParallaxImage({
     <div ref={ref} className={`pimg ${className}`}>
       <motion.img
         src={src}
+        srcSet={srcset(src)}
+        sizes={sizes}
         alt={alt}
         loading={priority ? "eager" : "lazy"}
+        decoding="async"
         style={{ y, height: `${100 + strength * 2}%`, top: `-${strength}%` }}
       />
     </div>

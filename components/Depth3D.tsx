@@ -4,9 +4,9 @@ import { useEffect } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 
 /*
-  3D depth for the photo panels: anything marked data-depth starts tilted back a little
-  in perspective and settles flat as it comes up the screen, before it is read. Kept off
-  the data panels (the terminal, the challenge board), which are read as they arrive.
+  Depth for the photo panels: anything marked data-depth rises a little slower than the
+  page as it comes up the screen and settles before it is read. Kept off the data panels
+  (the terminal, the challenge board), which are read as they arrive.
   Scrubbed by ScrollTrigger, transform only, and switched off for reduced motion.
 */
 export function Depth3D() {
@@ -17,11 +17,10 @@ export function Depth3D() {
       els.forEach((el) => {
         gsap.fromTo(
           el,
-          { rotateX: 8, y: 40, scale: 0.97, transformPerspective: 1600, transformOrigin: "50% 100%" },
+          // A plain lift: no 3D tilt, which cost the browser a stall the first time it drew one.
+          { y: 48 },
           {
-            rotateX: 0,
             y: 0,
-            scale: 1,
             ease: "none",
             // Flat well before the panel reaches reading height.
             scrollTrigger: { trigger: el, start: "top 100%", end: "top 75%", scrub: 0.4 },

@@ -15,6 +15,13 @@ export type Mode = "health" | "wealth";
 export const img = (id: string, w = 2400) =>
   `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=80`;
 
+/*
+  Widths for a photo, so the browser downloads and decodes only the size the screen needs
+  instead of the full 2400px file. Works on any Unsplash URL made by img().
+*/
+export const srcset = (src: string) =>
+  [640, 960, 1400, 2000, 2400].map((w) => `${src.replace(/w=\d+/, `w=${w}`)} ${w}w`).join(", ");
+
 export const brand = {
   name: "1% Daily",
   full: "1% Daily Healthy Wealthy",

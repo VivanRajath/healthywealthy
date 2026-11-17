@@ -9,7 +9,7 @@ import { ease } from "./Motion";
 import { Pillars } from "./Pillars";
 import { ClassStrip } from "./ClassStrip";
 import { RocketAnchor } from "./StoryRocket";
-import { content } from "@/lib/content";
+import { content, srcset } from "@/lib/content";
 
 /*
   The rocket's last scene: it lifts off and hauls the Health and Wealth panel up
@@ -87,7 +87,14 @@ export function Tabs() {
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.6 }}
                 >
-                  <motion.img src={c.image} alt={c.imageAlt} style={{ scale: photoScale }} />
+                  <motion.img
+                    src={c.image}
+                    srcSet={srcset(c.image)}
+                    sizes="100vw"
+                    decoding="async"
+                    alt={c.imageAlt}
+                    style={{ scale: photoScale }}
+                  />
                 </motion.div>
               </AnimatePresence>
               <div className="launch__scrim" aria-hidden />

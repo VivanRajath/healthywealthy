@@ -13,9 +13,9 @@ const options: { id: Mode; label: string; Icon: typeof HeartPulse; color: string
 ];
 
 /*
-  The side you are not on is drawn as a button: solid face, its own colour, the same
-  arrow box as the site's other buttons, and a light sweep across it until the switch
-  has been used once.
+  The side you are not on is drawn as a button: solid face, its own colour and the same
+  arrow box as the site's other buttons. (An endless light sweep across it was removed:
+  it made the browser stall when the lift-off scene came into view.)
 */
 export function ModeSwitch({ size = "md", id }: { size?: "md" | "lg"; id: string }) {
   const { mode, setMode } = useMode();

@@ -4,6 +4,7 @@ import { useCallback, useRef, useState } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { ArrowLeft, ArrowRight, ArrowUpRight, Clock, CalendarDays, MapPin, Gauge, Dumbbell, Users, Check, Info } from "lucide-react";
 import { classes, getClass } from "@/lib/classes";
+import { srcset } from "@/lib/content";
 import { ParallaxImage, Reveal, SplitHeading, ease } from "./Motion";
 import { BookModal } from "./BookModal";
 import { useMode } from "./ModeProvider";
@@ -52,6 +53,9 @@ export function ClassPage({ slug }: { slug: string }) {
         <motion.div className="ch__media" style={{ y: imgY, scale: imgScale }}>
           <motion.img
             src={c.hero}
+            srcSet={srcset(c.hero)}
+            sizes="100vw"
+            decoding="async"
             alt={c.heroAlt}
             initial={reduce ? false : { opacity: 0, scale: 1.08 }}
             animate={{ opacity: 1, scale: 1 }}

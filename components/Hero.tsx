@@ -10,7 +10,7 @@ import { RocketAnchor } from "./StoryRocket";
 import { useMarket } from "./MarketProvider";
 import { useMode } from "./ModeProvider";
 import { fmt, pct } from "@/lib/market";
-import { img } from "@/lib/content";
+import { img, srcset } from "@/lib/content";
 
 /* Final card position as insets of the viewport (top, right, bottom, left in %). */
 const DESKTOP = [18, 34, 5, 34];
@@ -141,6 +141,9 @@ export function Hero() {
           <motion.div className="hero__media" style={{ y: imgY, scale: imgScale }}>
             <motion.img
               src={img("1506905925346-21bda4d32df4")}
+              srcSet={srcset(img("1506905925346-21bda4d32df4"))}
+              sizes="100vw"
+              decoding="async"
               alt="Mountain peaks rising above a sea of clouds at dawn"
               initial={reduce ? false : { opacity: 0, scale: 1.08 }}
               animate={{ opacity: 1, scale: 1 }}

@@ -4,6 +4,7 @@ import { ModeProvider } from "@/components/ModeProvider";
 import { MarketProvider } from "@/components/MarketProvider";
 import { Depth3D } from "@/components/Depth3D";
 import { Backdrop } from "@/components/Backdrop";
+import { Prewarm } from "@/components/Prewarm";
 import "./globals.css";
 import "./markets.css";
 import "./sections.css";
@@ -58,6 +59,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <MarketProvider>
             <Depth3D />
             <Backdrop />
+            <Prewarm />
             {children}
           </MarketProvider>
         </ModeProvider>

@@ -61,7 +61,7 @@ export function Testimonials() {
 
       <figure className="voices__feature" data-depth>
         <div className="voices__photo">
-          <ParallaxImage src={featured.image} alt="" strength={8} />
+          <ParallaxImage src={featured.image} alt="" strength={8} sizes="(max-width: 900px) 100vw, 42vw" />
           <span className="voices__tag">{featured.tag}</span>
         </div>
         <div className="voices__body">

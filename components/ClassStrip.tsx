@@ -2,6 +2,7 @@
 
 import { ArrowUpRight, Clock, Gauge } from "lucide-react";
 import { classes } from "@/lib/classes";
+import { srcset } from "@/lib/content";
 import { Reveal } from "./Motion";
 
 /* The health classes, shown in the Health tab. Each opens its own page. */
@@ -22,7 +23,14 @@ export function ClassStrip() {
           <Reveal key={c.slug} delay={(i % 3) * 0.08} className="cstrip__cell">
             <a href={`/classes/${c.slug}/`} className="ctile ctile--big">
               <span className="ctile__img">
-                <img src={c.hero.replace("w=2400", "w=1100")} alt={c.heroAlt} loading="lazy" />
+                <img
+                  src={c.hero.replace("w=2400", "w=1100")}
+                  srcSet={srcset(c.hero)}
+                  sizes="(max-width: 720px) 100vw, 33vw"
+                  alt={c.heroAlt}
+                  loading="lazy"
+                  decoding="async"
+                />
               </span>
               <span className="ctile__body">
                 <strong>{c.name}</strong>
